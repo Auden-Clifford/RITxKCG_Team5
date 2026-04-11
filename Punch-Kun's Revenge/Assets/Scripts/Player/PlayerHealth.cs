@@ -12,6 +12,16 @@ public class PlayerHealth : Health
         OnPlayerTakeDamage?.Invoke();
 
         // ** lose condition **
-        if (_currentHealth == 0) OnPlayerDeath?.Invoke();
+        if (_currentHealth == 0)
+        {
+            OnPlayerDeath?.Invoke();
+            if (GameManager.Instance != null)
+                GameManager.Instance.GameOver();
+        }
+    }
+
+    public void Heal(int healAmount = 1)
+    {
+        _currentHealth = Math.Min(_currentHealth + healAmount, _maxHealth);
     }
 }
