@@ -22,6 +22,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float _stunDuration = 2.0f;
     [SerializeField] private float _stunMoveSpeedMultiplier = 0.5f;
 
+    private Camera _mainCam;
     private Rigidbody _rb;
     private float _moveX;
     private bool _isStunned;
@@ -44,12 +45,27 @@ public class PlayerController : Singleton<PlayerController>
         _rb = GetComponent<Rigidbody>();
     }
 
+    private void Start()
+    {
+        _mainCam = Camera.main;
+    }
+
     private void FixedUpdate()
     {
         HandleMove();
 
         // apply extra gravity when in the air
         if (!IsGrounded()) _rb.AddForce(Vector3.down * _gravityInAirGravity, ForceMode.Acceleration);
+    }
+
+    private void LateUpdate()
+    {
+        // keep player inside the camera bounds
+        Vector3 camPos = _mainCam.transform.position;
+        Vector3 playerPos = transform.position;
+        playerPos.x = Mathf.Clamp(playerPos.x, camPos.x - _mainCam.orthographicSize * _mainCam.aspect, camPos.x + _mainCam.orthographicSize * _mainCam.aspect);
+        // playerPos.y = Mathf.Clamp(playerPos.y, camPos.y - _mainCam.orthographicSize, camPos.y + _mainCam.orthographicSize);
+        transform.position = playerPos;
     }
 
     private void OnMove(InputValue val)
