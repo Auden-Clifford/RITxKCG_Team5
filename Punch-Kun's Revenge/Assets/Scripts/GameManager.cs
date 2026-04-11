@@ -13,7 +13,7 @@ public enum GameState
     LevelComplete
 }
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     private float score;
     [SerializeField] private Vector3 scrollSpeed;
@@ -114,12 +114,12 @@ public class GameManager : MonoBehaviour
             Destroy(enemies[i]);
         }
         enemies.Clear();
-        for (int i = 0; i < obstacles.Count; i++) 
-        { 
+        for (int i = 0; i < obstacles.Count; i++)
+        {
             Destroy(obstacles[i]);
         }
         obstacles.Clear();
-        for (int i = 0; i < healingItems.Count; i++) 
+        for (int i = 0; i < healingItems.Count; i++)
         {
             Destroy(healingItems[i]);
         }

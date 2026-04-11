@@ -17,17 +17,18 @@ enum BullyMonkeyState
 public class BullyMonkey : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float _speed = 5.0f;
+    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _forceMultiplier = 2f;
 
     [Space(10)]
     [Header("Chase Settings")]
-    [SerializeField] private float _startChaseRange = 10.0f;
+    [SerializeField] private float _startChaseRange = 10f;
 
     [Space(10)]
     [Header("Attack Settings")]
-    [SerializeField] private float _attackRange = 2.0f;
+    [SerializeField] private float _attackRange = 2f;
     [SerializeField] private int _playerDamage = 1;
-    [SerializeField] private float _attackCooldown = 2.0f;
+    [SerializeField] private float _attackCooldown = 2f;
 
     private Rigidbody _rb;
     private Transform _player;
@@ -85,8 +86,10 @@ public class BullyMonkey : MonoBehaviour
         // _rb.MovePosition(transform.position + _speed * Time.deltaTime * direction);
 
         // kind of natural movement but need to limit the max speed
-        _rb.AddForce(_speed * direction, ForceMode.Acceleration);
+        _rb.AddForce(_speed * _forceMultiplier * direction, ForceMode.Acceleration);
         _rb.linearVelocity = Vector3.ClampMagnitude(_rb.linearVelocity, _speed);
+
+        // TODO: rotate bully monkey in the direction of movement
     }
 
     private bool IsPlayerInRange(float range)
@@ -113,7 +116,7 @@ public class BullyMonkey : MonoBehaviour
         {
             _isCoolingDown = false;
             _state = BullyMonkeyState.Idle;
-            _rb.constraints = RigidbodyConstraints.None;   // unfreeze the bully monkey after cooldown
+            _rb.constraints = RigidbodyConstraints.FreezeRotation;   // unfreeze the position of bully monkey after cooldown
         }));
     }
 
