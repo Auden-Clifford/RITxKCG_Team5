@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(PlayerInput))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     [Header("Movement Settings")]
     [SerializeField] private float _speed = 10.0f;
@@ -18,24 +18,34 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _groundLayer;
 
     [Space(10)]
-    [Header("Misc Settings")]
+    [Header("Stun Settings")]
     [SerializeField] private float _stunDuration = 2.0f;
+    [SerializeField] private float _stunMoveSpeedMultiplier = 0.5f;
 
     private Rigidbody _rb;
     private float _moveX;
     private bool _isStunned;
 
-    private void Start()
+    private void OnEnable()
     {
+        PlayerHealth.OnPlayerTakeDamage += GetStunned;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.OnPlayerTakeDamage -= GetStunned;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
         _isStunned = false;
         _rb = GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
     {
-        // prevent player from moving or jumping if stunned
-        if (_isStunned) GetStunned();
-
         HandleMove();
 
         // apply extra gravity when in the air
@@ -47,6 +57,8 @@ public class PlayerController : MonoBehaviour
         _moveX = val.Get<Vector2>().x;
 
         if (_moveX == 0) return;
+
+        // TODO: rotate player in the direction of movement
         // FlipPlayerHorizontally(_moveX < 0);
     }
 
@@ -54,15 +66,16 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMove()
     {
-        Vector3 targetVelocity = new(_moveX * _speed, _rb.linearVelocity.y, 0);
+        float currentSpeed = _isStunned ? _speed * _stunMoveSpeedMultiplier : _speed;
+        Vector3 targetVelocity = new(_moveX * currentSpeed, _rb.linearVelocity.y, 0);
         Vector3 velocityChange = targetVelocity - _rb.linearVelocity;
         _rb.AddForce(velocityChange, ForceMode.VelocityChange);
     }
 
     private void HandleJump()
     {
-        // prevent jumping if not grounded or if stunned
-        if (!IsGrounded() || _isStunned) return;
+        // prevent jumping if not grounded
+        if (!IsGrounded()) return;
 
         _rb.AddForce(_jumpForce * (Vector3.up + new Vector3(_moveX, 0, 0)), ForceMode.Impulse);
     }
@@ -71,7 +84,7 @@ public class PlayerController : MonoBehaviour
 
     private void GetStunned()
     {
-        // disable player input for a short duration, then reset
+        // apply stun for a short duration, then reset
         _isStunned = true;
         StartCoroutine(Timer.WaitFor(_stunDuration, () => _isStunned = false));
     }
