@@ -2385,6 +2385,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 937880549}
   m_CullTransparentMesh: 1
+--- !u!1 &973672610 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8909839223824082, guid: ba0e7118ce729c44282874fd2499c5c6, type: 3}
+  m_PrefabInstance: {fileID: 5115754811705479152}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &973672612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973672610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0426b0e32b44d4f4ebc0bcb27e2d0b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  _breakEffectPrefab: {fileID: 0}
+  _defaultSpeed: 3
 --- !u!1 &1051801985
 GameObject:
   m_ObjectHideFlags: 0
@@ -2823,7 +2845,10 @@ MonoBehaviour:
   pausedUI: {fileID: 1598254589}
   mainMenuUI: {fileID: 720316801}
   gameplayUI: {fileID: 2114212343}
-  enemyPrefab: {fileID: 8897396379199887960, guid: 3bfec3aaabca8a44e99114f4d11f1b80, type: 3}
+  enemyPrefab:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   barrelPrefab: {fileID: 7344457069304786540, guid: ba0e7118ce729c44282874fd2499c5c6, type: 3}
   potatoPrefab: {fileID: 1356511156153002102}
   itemSpawnPosition: {fileID: 254374370}
@@ -4692,7 +4717,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8909839223824082, guid: ba0e7118ce729c44282874fd2499c5c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 973672612}
   m_SourcePrefab: {fileID: 100100000, guid: ba0e7118ce729c44282874fd2499c5c6, type: 3}
 --- !u!1001 &6541273054249627859
 PrefabInstance:
