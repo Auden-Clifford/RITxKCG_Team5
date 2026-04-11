@@ -1,8 +1,5 @@
-using NUnit.Framework;
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-
 
 public enum GameState
 {
@@ -24,7 +21,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject pausedUI;
     [SerializeField] private GameObject mainMenuUI;
     [SerializeField] private GameObject gameplayUI;
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject[] enemyPrefab;
     [SerializeField] private GameObject barrelPrefab;
     [SerializeField] private GameObject potatoPrefab;
 
@@ -78,7 +75,7 @@ public class GameManager : Singleton<GameManager>
                     Debug.Log("spawning enemy");
                     enemySpawnTimer = enemySpawnDelay;
                     //GameObject enemy = Instantiate(enemyPrefab, itemSpawnPosition);
-                    enemies.Add(Instantiate(enemyPrefab, itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
+                    enemies.Add(Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Length)], itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
                 }
                 if (obstacleSpawnTimer < 0)
                 {
@@ -98,7 +95,6 @@ public class GameManager : Singleton<GameManager>
             case GameState.GameOver: break;
             case GameState.LevelComplete: break;
             case GameState.Paused: break;
-
         }
     }
 

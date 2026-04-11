@@ -1,6 +1,6 @@
 using UnityEngine;
 
-enum BullyMonkeyState
+public enum BullyMonkeyState
 {
     Idle,                   // not doing anything, just standing there unless player is in range
     MovingTowardsPlayer,    // moving towards player but not in range yet
@@ -14,7 +14,7 @@ enum BullyMonkeyState
 /// - Attack player when in range
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class BullyMonkey : MonoBehaviour
+public abstract class BullyMonkey : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float _speed = 5f;
@@ -22,19 +22,19 @@ public class BullyMonkey : MonoBehaviour
 
     [Space(10)]
     [Header("Chase Settings")]
-    [SerializeField] private float _startChaseRange = 10f;
+    [SerializeField] private float _startChaseRange = 15f;
 
     [Space(10)]
     [Header("Attack Settings")]
-    [SerializeField] private float _attackRange = 2f;
-    [SerializeField] private int _playerDamage = 1;
-    [SerializeField] private float _attackCooldown = 2f;
+    [SerializeField] private float _attackRange = 10f;
+    [SerializeField] protected int _playerDamage = 1;
+    [SerializeField] protected float _attackCooldown = 2f;
 
-    private Rigidbody _rb;
-    private Transform _player;
-    private BullyMonkeyState _state = BullyMonkeyState.Idle;
-    private bool _canMoveTowardsPlayer = false;
-    private bool _isCoolingDown = false;
+    protected Rigidbody _rb;
+    protected Transform _player;
+    protected BullyMonkeyState _state = BullyMonkeyState.Idle;
+    protected bool _canMoveTowardsPlayer = false;
+    protected bool _isCoolingDown = false;
 
     private void Start()
     {
@@ -67,6 +67,8 @@ public class BullyMonkey : MonoBehaviour
                 break;
 
             case BullyMonkeyState.AttackingPlayer:
+                _canMoveTowardsPlayer = false;
+
                 if (!_isCoolingDown)
                     AttackPlayer();
                 break;
@@ -98,25 +100,20 @@ public class BullyMonkey : MonoBehaviour
         return distance <= range;
     }
 
-    private void AttackPlayer()
+    protected virtual void AttackPlayer()
     {
         // TODO: Implementation for attacking the player
         Debug.LogError("Attacking player!");
 
-        // damage player
-        if (_player.TryGetComponent(out Health health))
-            health.TakeDamage(_playerDamage);
-
         // ! needed to add a cooldown for attacking the player, otherwise it will just keep damaging the player every frame when in range
         // TODO: maybe add an attack animation and only apply DAMAGE to player at a certain frame of the animation, then start cooldown after the animation is done
         _isCoolingDown = true;
-        _canMoveTowardsPlayer = false;
-        _rb.constraints = RigidbodyConstraints.FreezeAll;   // freeze the bully monkey in place after attacking for cooldown
+        // _rb.constraints = RigidbodyConstraints.FreezeAll;   // freeze the bully monkey in place after attacking for cooldown
         StartCoroutine(Timer.WaitFor(_attackCooldown, () =>
         {
             _isCoolingDown = false;
             _state = BullyMonkeyState.Idle;
-            _rb.constraints = RigidbodyConstraints.FreezeRotation;   // unfreeze the position of bully monkey after cooldown
+            // _rb.constraints = RigidbodyConstraints.FreezeRotation;   // unfreeze the position of bully monkey after cooldown
         }));
     }
 
