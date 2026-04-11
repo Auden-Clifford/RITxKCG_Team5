@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
-    MainMenu,
     Gameplay,
     GameOver,
     Paused,
@@ -19,7 +19,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject levelCompleteUI;
     [SerializeField] private GameObject pausedUI;
-    [SerializeField] private GameObject mainMenuUI;
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject[] enemyPrefab;
     [SerializeField] private GameObject barrelPrefab;
@@ -49,11 +48,15 @@ public class GameManager : Singleton<GameManager>
         ResetScene();
 
         // set the initial UI state
-        mainMenuUI.SetActive(true);
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         pausedUI.SetActive(false);
         gameplayUI.SetActive(false);
+
+        // start the game
+        Time.timeScale = 1;
+        gameState = GameState.Gameplay;
+        gameplayUI.SetActive(true);
     }
 
     // Update is called once per frame
@@ -61,7 +64,6 @@ public class GameManager : Singleton<GameManager>
     {
         switch (gameState)
         {
-            case GameState.MainMenu: break;
             case GameState.Gameplay:
                 Camera.main.gameObject.transform.position += scrollSpeed * Time.deltaTime; // move the camera
                 scrollSpeed += scrollAcceleration * Time.deltaTime; // accelerate
@@ -127,15 +129,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void StartGame()
     {
-        ResetScene();
-
-        gameState = GameState.Gameplay;
-        mainMenuUI.SetActive(false);
-        gameOverUI.SetActive(false);
-        levelCompleteUI.SetActive(false);
-        pausedUI.SetActive(false);
-        gameplayUI.SetActive(true);
-
+        // just reload current scene
+        SceneManager.LoadScene(Scenes.MAIN_LEVEL);
     }
 
     /// <summary>
@@ -144,11 +139,13 @@ public class GameManager : Singleton<GameManager>
     public void PauseGame()
     {
         gameState = GameState.Paused;
-        mainMenuUI.SetActive(false);
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         pausedUI.SetActive(true);
         gameplayUI.SetActive(false);
+
+        // stop time
+        Time.timeScale = 0;
     }
 
     /// <summary>
@@ -157,11 +154,13 @@ public class GameManager : Singleton<GameManager>
     public void ResumeGame()
     {
         gameState = GameState.Gameplay;
-        mainMenuUI.SetActive(false);
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         pausedUI.SetActive(false);
         gameplayUI.SetActive(true);
+
+        // resume time
+        Time.timeScale = 1;
     }
 
     /// <summary>
@@ -170,11 +169,13 @@ public class GameManager : Singleton<GameManager>
     public void GameOver()
     {
         gameState = GameState.GameOver;
-        mainMenuUI.SetActive(false);
         gameOverUI.SetActive(true);
         levelCompleteUI.SetActive(false);
         pausedUI.SetActive(false);
         gameplayUI.SetActive(false);
+
+        // stop time
+        Time.timeScale = 0;
     }
 
     /// <summary>
@@ -183,11 +184,13 @@ public class GameManager : Singleton<GameManager>
     public void LevelComplete()
     {
         gameState = GameState.LevelComplete;
-        mainMenuUI.SetActive(false);
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(true);
         pausedUI.SetActive(false);
         gameplayUI.SetActive(false);
+
+        // stop time
+        Time.timeScale = 0;
     }
 
     /// <summary>
@@ -195,11 +198,6 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void QuitToMain()
     {
-        gameState = GameState.MainMenu;
-        mainMenuUI.SetActive(true);
-        gameOverUI.SetActive(false);
-        levelCompleteUI.SetActive(false);
-        pausedUI.SetActive(false);
-        gameplayUI.SetActive(false);
+        SceneManager.LoadScene(Scenes.TITLE);
     }
 }
