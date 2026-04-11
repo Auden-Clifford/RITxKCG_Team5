@@ -16,5 +16,7 @@ public abstract class Health : MonoBehaviour
     public virtual void TakeDamage(int damage = 1)
     {
         _currentHealth = Mathf.Max(0, _currentHealth - damage);
+
+        Debug.LogWarning($"{gameObject.name} took {damage} damage! Current health: {_currentHealth}");
     }
 }
