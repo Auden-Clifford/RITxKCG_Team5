@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using Unity.Mathematics;
 
 [RequireComponent(typeof(Rigidbody), typeof(PlayerInput))]
 public class PlayerController : Singleton<PlayerController>
@@ -25,7 +27,14 @@ public class PlayerController : Singleton<PlayerController>
     [Space(10)]
     [Header("Attack Settings")]
     [SerializeField] private float _attackRange = 2f;
+    [SerializeField] private int _damage = 3;
     [SerializeField] private LayerMask _damagableLayers;
+    [SerializeField] private BoxCollider2D attackHitbox;
+    //private Vector3 _attackPosition;
+    private Vector3 _attackDirection;
+    private Vector3 _mouseScreenPosition;
+    private Vector3 _mouseDirection;
+    private Vector3 _gamepadDirection;
 
     private Camera _mainCam;
     private Rigidbody _rb;
@@ -48,6 +57,7 @@ public class PlayerController : Singleton<PlayerController>
 
         _isStunned = false;
         _rb = GetComponent<Rigidbody>();
+        //_attackPosition = Vector3.zero;
     }
 
     private void Start()
@@ -90,9 +100,36 @@ public class PlayerController : Singleton<PlayerController>
         Debug.LogWarning("************ ATTACKING ***************");
 
         // ! TEMP
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, _attackRange, Vector3.right, _attackRange, _damagableLayers);
-        foreach (RaycastHit hit in hits)
-            Destroy(hit.collider.gameObject);
+        //RaycastHit[] hits = Physics.SphereCastAll(transform.position, _attackRange, Vector3.right, _attackRange, _damagableLayers);
+        //foreach (RaycastHit hit in hits)
+        //    Destroy(hit.collider.gameObject);
+
+
+        Vector3 attackPosition = transform.position + _attackDirection; 
+        List<Collider> HitObjects = new List<Collider>(Physics.OverlapBox(attackPosition, new Vector3(1, 0.75f, 1), Quaternion.identity, _damagableLayers));
+        foreach(Collider collider in HitObjects)
+        {
+            Debug.Log("hit");
+            collider.gameObject.GetComponent<Health>().TakeDamage(_damage);
+        }
+    }
+
+    /// <summary>
+    /// Rotates the attack hitbox towards the mouse
+    /// </summary>
+    /// <param name="val"></param>
+    private void OnLookMouse(InputValue val)
+    {
+        _mouseScreenPosition = val.Get<Vector2>(); // screen position
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(_mouseScreenPosition); // world position
+        Vector3 toMouse = mouseWorldPosition - transform.position; // vector from player to mouse
+        _attackDirection = Vector3.Normalize(new Vector3(toMouse.x, 0, 0));
+    }
+
+    private void OnLookGamepad(InputValue val)
+    {
+        Vector2 stickInput = val.Get<Vector2>();
+        _attackDirection = Vector3.Normalize(new Vector3(stickInput.x, 0, 0));
     }
 
     private void HandleMove()
@@ -124,5 +161,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         Gizmos.color = Color.purple;
         Gizmos.DrawWireSphere(transform.position, 2f);
+        Vector3 attackPosition = transform.position + _attackDirection;
+        Gizmos.DrawWireCube(attackPosition, new Vector3(2, 1.5f, 1));
     }
 }

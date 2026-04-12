@@ -17,6 +17,7 @@ public class BullyMonkeyHealth : Health
         // ** death **
         if (_currentHealth == 0)
         {
+            Debug.Log("I died");
             if (GameManager.Instance != null)
                 GameManager.Instance.AddScore(score);
             Destroy(gameObject);
