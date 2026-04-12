@@ -5248,8 +5248,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollSpeed: {x: 0.5, y: 0, z: 0}
-  scrollAcceleration: {x: 0.1, y: 0, z: 0}
-  maxScrollSpeed: 4
+  scrollAcceleration: {x: 0.2, y: 0, z: 0}
+  maxScrollSpeed: 5
   gameOverUI: {fileID: 1275389436}
   levelCompleteUI: {fileID: 1589234494}
   pausedUI: {fileID: 1598254589}
@@ -9362,6 +9362,10 @@ PrefabInstance:
     - target: {fileID: 4547294081460675587, guid: 0814184e4dceb37489e392e3f7b1cbae, type: 3}
       propertyPath: m_Name
       value: Doll
+      objectReference: {fileID: 0}
+    - target: {fileID: 4581956005576984457, guid: 0814184e4dceb37489e392e3f7b1cbae, type: 3}
+      propertyPath: score
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 7032951783879579103, guid: 0814184e4dceb37489e392e3f7b1cbae, type: 3}
       propertyPath: m_LocalPosition.x
