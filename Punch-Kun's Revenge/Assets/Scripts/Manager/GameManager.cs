@@ -15,6 +15,8 @@ public class GameManager : Singleton<GameManager>
     private float score;
     [SerializeField] private Vector3 scrollSpeed;
     [SerializeField] private Vector3 scrollAcceleration;
+    [SerializeField] private float maxScrollSpeed;
+
     private GameState gameState;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject levelCompleteUI;
@@ -66,7 +68,8 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.Gameplay:
                 Camera.main.gameObject.transform.position += scrollSpeed * Time.deltaTime; // move the camera
-                scrollSpeed += scrollAcceleration * Time.deltaTime; // accelerate
+                float newScrollSpeed = Mathf.Clamp(scrollSpeed.x + scrollAcceleration.x * Time.deltaTime, 0 , maxScrollSpeed); // accelerate
+                scrollSpeed.x = newScrollSpeed;
 
                 enemySpawnTimer -= Time.deltaTime;
                 obstacleSpawnTimer -= Time.deltaTime;
@@ -199,5 +202,11 @@ public class GameManager : Singleton<GameManager>
     public void QuitToMain()
     {
         SceneManager.LoadScene(Scenes.TITLE);
+    }
+
+    public void SlowCamera(float amount)
+    {
+        float newSpeed = Mathf.Clamp(scrollSpeed.x - amount, 0, maxScrollSpeed);
+        scrollSpeed.x = newSpeed;
     }
 }
