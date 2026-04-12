@@ -5837,7 +5837,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1332267443}
   - component: {fileID: 1332267442}
-  - component: {fileID: 1332267441}
   - component: {fileID: 1332267440}
   m_Layer: 0
   m_Name: Step
@@ -9508,4 +9507,3 @@ SceneRoots:
   - {fileID: 463583509}
   - {fileID: 1126554016}
   - {fileID: 7879691374170606939}
-  - {fileID: 1854693337}
