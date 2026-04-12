@@ -8,17 +8,18 @@ namespace Barrel
     /// </summary>
     public class NormalBarrel : BarrelBase
     {
-        [Header("Normal Barrel Settings")]
-        [SerializeField] private float _defaultSpeed = 5f;
-
         protected override void Start()
         {
             base.Start();
 
             // Set initial movement values
             MoveDir = Vector3.left;
-            BarrelSpeed = _defaultSpeed;
-            BarrelType = BarrelType.Normal;
+
+            if (_barrelData != null)
+            {
+                BarrelSpeed = _barrelData.moveSpeed;
+                BarrelType = _barrelData.barrelType;
+            }
         }
 
         /// <summary>
