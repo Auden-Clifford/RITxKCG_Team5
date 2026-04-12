@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 5
+  score: 200
 --- !u!114 &1260164024433334233
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -357,7 +357,8 @@ Transform:
   m_LocalPosition: {x: 64.15, y: -5.02, z: 0}
   m_LocalScale: {x: 150, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 519420032}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &103888775
@@ -1528,13 +1529,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.42766666, y: 5.02, z: -2}
+  m_LocalScale: {x: 0.0066666664, y: 1, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 254374370}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 76470095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519699875
 GameObject:
@@ -2891,7 +2892,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollSpeed: {x: 0.5, y: 0, z: 0}
-  scrollAcceleration: {x: 0.1, y: 0, z: 0}
+  scrollAcceleration: {x: 0.2, y: 0, z: 0}
+  maxScrollSpeed: 5
   gameOverUI: {fileID: 1275389436}
   levelCompleteUI: {fileID: 1589234494}
   pausedUI: {fileID: 1598254589}
@@ -4659,6 +4661,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Doll
       objectReference: {fileID: 0}
+    - target: {fileID: 4581956005576984457, guid: 0814184e4dceb37489e392e3f7b1cbae, type: 3}
+      propertyPath: score
+      value: 5000
+      objectReference: {fileID: 0}
     - target: {fileID: 7032951783879579103, guid: 0814184e4dceb37489e392e3f7b1cbae, type: 3}
       propertyPath: m_LocalPosition.x
       value: 131.8
@@ -4708,7 +4714,6 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1537004619}
   - {fileID: 527728351}
