@@ -15,13 +15,15 @@ public class GameManager : Singleton<GameManager>
     private float score;
     [SerializeField] private Vector3 scrollSpeed;
     [SerializeField] private Vector3 scrollAcceleration;
+    [SerializeField] private float maxScrollSpeed;
+
     private GameState gameState;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject levelCompleteUI;
     [SerializeField] private GameObject pausedUI;
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject[] enemyPrefab;
-    [SerializeField] private GameObject barrelPrefab;
+    [SerializeField] private GameObject[] barrelPrefab;
     [SerializeField] private GameObject potatoPrefab;
 
     [SerializeField] private Transform itemSpawnPosition;
@@ -66,7 +68,8 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.Gameplay:
                 Camera.main.gameObject.transform.position += scrollSpeed * Time.deltaTime; // move the camera
-                scrollSpeed += scrollAcceleration * Time.deltaTime; // accelerate
+                float newScrollSpeed = Mathf.Clamp(scrollSpeed.x + scrollAcceleration.x * Time.deltaTime, 0 , maxScrollSpeed); // accelerate
+                scrollSpeed.x = newScrollSpeed;
 
                 enemySpawnTimer -= Time.deltaTime;
                 obstacleSpawnTimer -= Time.deltaTime;
@@ -84,7 +87,7 @@ public class GameManager : Singleton<GameManager>
                     Debug.Log("spawning obstacle");
                     obstacleSpawnTimer = obstacleSpawnDelay;
                     //GameObject obstacle = Instantiate(barrelPrefab, itemSpawnPosition);
-                    enemies.Add(Instantiate(barrelPrefab, itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
+                    enemies.Add(Instantiate(barrelPrefab[Random.Range(0, barrelPrefab.Length)], itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
                 }
                 if (healthItemSpawnTimer < 0)
                 {
@@ -199,5 +202,11 @@ public class GameManager : Singleton<GameManager>
     public void QuitToMain()
     {
         SceneManager.LoadScene(Scenes.TITLE);
+    }
+
+    public void SlowCamera(float amount)
+    {
+        float newSpeed = Mathf.Clamp(scrollSpeed.x - amount, 0, maxScrollSpeed);
+        scrollSpeed.x = newSpeed;
     }
 }

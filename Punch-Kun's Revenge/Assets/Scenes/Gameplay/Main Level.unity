@@ -5879,11 +5879,33 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1332267441
-MeshRenderer:
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ec5fea700b7ff4ca513e3980e6f0d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollSpeed: {x: 0.5, y: 0, z: 0}
+  scrollAcceleration: {x: 0.1, y: 0, z: 0}
+  gameOverUI: {fileID: 1275389436}
+  levelCompleteUI: {fileID: 1589234494}
+  pausedUI: {fileID: 1598254589}
+  gameplayUI: {fileID: 2114212343}
+  enemyPrefab:
+  - {fileID: 2412115825711047917, guid: 73b8d8664e0e2ba49bf43d9671ef52f3, type: 3}
+  - {fileID: 2412115825711047917, guid: ccccfbaee33a2374ca9a551c17a2e2e7, type: 3}
+  - {fileID: 2412115825711047917, guid: f6bdf82eff6bb6a4f9cb099283772398, type: 3}
+  barrelPrefab:
+  - {fileID: 8705712110159800726, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+  - {fileID: 8705712110159800726, guid: cbb7eab8922b5e740a0fd68b6a08d5c4, type: 3}
+  potatoPrefab: {fileID: 822610579171219329, guid: 8536b221eb4b3634ba4ab35b5d90134d, type: 3}
+  itemSpawnPosition: {fileID: 254374370}
+  enemySpawnTimer: 0
+  enemySpawnDelay: 10
+  obstacleSpawnTimer: 0
+  obstacleSpawnDelay: 17
+  healthItemSpawnTimer: 0
+  healthItemSpawnDelay: 25
+--- !u!4 &1210252584
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -7658,8 +7680,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
-  _jumpForce: 10
-  _gravityInAirGravity: 7
+  _jumpForce: 15
+  _gravityInAirGravity: 40
   _groundCheckDistance: 1
   _groundLayer:
     serializedVersion: 2
@@ -8588,7 +8610,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ccccfbaee33a2374ca9a551c17a2e2e7, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
 --- !u!1 &2039332460
 GameObject:
   m_ObjectHideFlags: 0
@@ -9501,4 +9523,4 @@ SceneRoots:
   - {fileID: 463583509}
   - {fileID: 1126554016}
   - {fileID: 7879691374170606939}
-  - {fileID: 1009545467}
+  - {fileID: 1854693337}

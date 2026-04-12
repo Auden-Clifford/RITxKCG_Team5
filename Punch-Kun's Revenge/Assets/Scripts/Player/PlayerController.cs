@@ -80,6 +80,12 @@ public class PlayerController : Singleton<PlayerController>
 
     private void OnJump(InputValue val) => HandleJump();
 
+    private void OnAttack(InputValue val)
+    {
+        Debug.LogWarning("************ ATTACKING ***************");
+
+    }
+
     private void HandleMove()
     {
         float currentSpeed = _isStunned ? _speed * _stunMoveSpeedMultiplier : _speed;
