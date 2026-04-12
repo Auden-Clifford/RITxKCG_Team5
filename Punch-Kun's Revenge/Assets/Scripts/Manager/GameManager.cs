@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public enum GameState
 {
@@ -68,7 +69,7 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.Gameplay:
                 Camera.main.gameObject.transform.position += scrollSpeed * Time.deltaTime; // move the camera
-                float newScrollSpeed = Mathf.Clamp(scrollSpeed.x + scrollAcceleration.x * Time.deltaTime, 0 , maxScrollSpeed); // accelerate
+                float newScrollSpeed = Mathf.Clamp(scrollSpeed.x + scrollAcceleration.x * Time.deltaTime, 0, maxScrollSpeed); // accelerate
                 scrollSpeed.x = newScrollSpeed;
 
                 enemySpawnTimer -= Time.deltaTime;
@@ -217,5 +218,13 @@ public class GameManager : Singleton<GameManager>
     public void AddScore(float amount)
     {
         score += amount;
+    }
+
+    // ** Input System Callbacks **
+    private void OnPauseMenu(InputValue val)
+    {
+        Debug.LogWarning("SHOWING PAUSE MENU");
+        if (gameState != GameState.Paused) PauseGame();
+        else ResumeGame();
     }
 }
