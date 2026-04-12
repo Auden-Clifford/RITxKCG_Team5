@@ -204,9 +204,18 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(Scenes.TITLE);
     }
 
+    /// <summary>
+    /// Slows down the camera scrolling by a specified amount
+    /// </summary>
+    /// <param name="amount">Amount to slow down the camera</param>
     public void SlowCamera(float amount)
     {
         float newSpeed = Mathf.Clamp(scrollSpeed.x - amount, 0, maxScrollSpeed);
         scrollSpeed.x = newSpeed;
+    }
+
+    public void AddScore(float amount)
+    {
+        score += amount;
     }
 }
