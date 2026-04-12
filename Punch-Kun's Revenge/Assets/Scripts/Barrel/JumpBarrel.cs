@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Barrel
@@ -42,6 +43,14 @@ namespace Barrel
 
             //     transform.Translate(new Vector3(0, deltaY, 0), Space.World);
             // }
+        }
+
+        protected override void OnCollisionEnter(Collision collision)
+        {
+            base.OnCollisionEnter(collision);
+
+            // add a little upward force
+            _rb.AddForce(Vector3.up * _barrelData.verticleJumpForce, ForceMode.Impulse);
         }
     }
 }

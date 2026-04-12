@@ -3812,8 +3812,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
-  _jumpForce: 10
-  _gravityInAirGravity: 7
+  _jumpForce: 15
+  _gravityInAirGravity: 40
   _groundCheckDistance: 1
   _groundLayer:
     serializedVersion: 2
@@ -4222,6 +4222,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1841295903}
   m_CullTransparentMesh: 1
+--- !u!1001 &1854693337
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.599247
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.8252668
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6604312526009543320, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705712110159800726, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
+      propertyPath: m_Name
+      value: Bouncy Barrel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cf1c2e934e452524ebb1ae5b3346d9da, type: 3}
 --- !u!1 &2039332460
 GameObject:
   m_ObjectHideFlags: 0
@@ -4668,3 +4725,4 @@ SceneRoots:
   - {fileID: 1126554016}
   - {fileID: 1934757921309280036}
   - {fileID: 7879691374170606939}
+  - {fileID: 1854693337}

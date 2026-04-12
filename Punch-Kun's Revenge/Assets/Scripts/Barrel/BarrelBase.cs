@@ -31,7 +31,7 @@ namespace Barrel
         /// </summary>
         public BarrelType BarrelType { get; set; }
 
-        private Rigidbody _rb;
+        protected Rigidbody _rb;
 
         protected virtual void Start()
         {
@@ -61,7 +61,7 @@ namespace Barrel
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
-            // Check if hit the ground or environment
+            // Check if hit the step
             if (((1 << collision.gameObject.layer) & _groundLayer.value) != 0)
             {
                 Break();
@@ -71,7 +71,7 @@ namespace Barrel
         /// <summary>
         /// Implementation of IDamageable. Allows the player to break the barrel.
         /// </summary>
-        public virtual void TakeDamage()
+        public void TakeDamage()
         {
             Break();
         }

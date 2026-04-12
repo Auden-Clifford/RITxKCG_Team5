@@ -3,5 +3,5 @@
 /// </summary>
 public interface IDamageable
 {
-    void TakeDamage();
+    public void TakeDamage();
 }

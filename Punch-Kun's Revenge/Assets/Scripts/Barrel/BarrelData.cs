@@ -23,6 +23,8 @@ namespace Barrel
         [Tooltip("How fast the barrel jumps")]
         public float jumpFrequency = 3f;
 
+        public float verticleJumpForce = 2f;
+
         [Header("Visual Settings")]
         [Tooltip("Visual effect spawned when this barrel breaks")]
         public GameObject breakEffectPrefab;

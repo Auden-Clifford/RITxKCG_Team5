@@ -16,4 +16,5 @@ MonoBehaviour:
   moveSpeed: 5
   jumpAmplitude: 2
   jumpFrequency: 3
+  verticleJumpForce: 15
   breakEffectPrefab: {fileID: 0}
