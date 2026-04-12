@@ -6,6 +6,7 @@ namespace Barrel
     /// Base class for all barrel types.
     /// Handles movement, collision detection with environment (break on impact), and destruction.
     /// </summary>
+    [RequireComponent(typeof(Rigidbody))]
     public abstract class BarrelBase : MonoBehaviour, IDamageable
     {
         [Header("Barrel Settings")]
@@ -30,12 +31,15 @@ namespace Barrel
         /// </summary>
         public BarrelType BarrelType { get; set; }
 
+        private Rigidbody _rb;
+
         protected virtual void Start()
         {
             // Base initialization if needed
+            _rb = GetComponent<Rigidbody>();
         }
 
-        protected virtual void Update()
+        protected virtual void FixedUpdate()
         {
             Move();
         }
@@ -46,8 +50,13 @@ namespace Barrel
         protected virtual void Move()
         {
             // Move based on direction and speed
-            Vector3 movement = MoveDir * BarrelSpeed * Time.deltaTime;
-            transform.Translate(movement, Space.World);
+            // Vector3 movement = MoveDir * BarrelSpeed * Time.deltaTime;
+            // transform.Translate(movement, Space.World);
+            Vector3 movement = MoveDir * BarrelSpeed;
+            _rb.AddForce(movement, ForceMode.Force);
+
+            // clamp velocity
+            _rb.linearVelocity = Vector3.ClampMagnitude(_rb.linearVelocity, BarrelSpeed);
         }
 
         protected virtual void OnCollisionEnter(Collision collision)

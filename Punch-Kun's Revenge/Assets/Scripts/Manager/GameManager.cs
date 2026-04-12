@@ -21,7 +21,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject pausedUI;
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject[] enemyPrefab;
-    [SerializeField] private GameObject barrelPrefab;
+    [SerializeField] private GameObject[] barrelPrefab;
     [SerializeField] private GameObject potatoPrefab;
 
     [SerializeField] private Transform itemSpawnPosition;
@@ -84,7 +84,7 @@ public class GameManager : Singleton<GameManager>
                     Debug.Log("spawning obstacle");
                     obstacleSpawnTimer = obstacleSpawnDelay;
                     //GameObject obstacle = Instantiate(barrelPrefab, itemSpawnPosition);
-                    enemies.Add(Instantiate(barrelPrefab, itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
+                    enemies.Add(Instantiate(barrelPrefab[Random.Range(0, barrelPrefab.Length)], itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
                 }
                 if (healthItemSpawnTimer < 0)
                 {
