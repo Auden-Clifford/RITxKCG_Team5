@@ -12,8 +12,8 @@ namespace Barrel
         [Tooltip("Layer mask for the ground and walls to detect collision and break")]
         [SerializeField] protected LayerMask _groundLayer;
 
-        [Tooltip("Visual effect spawned when the barrel breaks")]
-        [SerializeField] protected GameObject _breakEffectPrefab;
+        [Tooltip("ScriptableObject containing stats for this barrel")]
+        [SerializeField] protected Barrel.BarrelData _barrelData;
 
         /// <summary>
         /// 樽の移動速度を保持するプロパティ
@@ -73,9 +73,9 @@ namespace Barrel
         protected virtual void Break()
         {
             // Spawn break effect if it exists
-            if (_breakEffectPrefab != null)
+            if (_barrelData != null && _barrelData.breakEffectPrefab != null)
             {
-                Instantiate(_breakEffectPrefab, transform.position, Quaternion.identity);
+                Instantiate(_barrelData.breakEffectPrefab, transform.position, Quaternion.identity);
             }
 
             // Destroy the barrel object
