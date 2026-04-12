@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 8999615287911569794}
   - component: {fileID: 4114292431303757658}
   - component: {fileID: 2428189954822868123}
-  m_Layer: 0
-  m_Name: Barrel
+  m_Layer: 7
+  m_Name: Throwable Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,7 +101,7 @@ SphereCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

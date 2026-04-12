@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Barrel
@@ -30,18 +31,26 @@ namespace Barrel
             base.Move();
 
             // 2. Add vertical bounce offset
-            if (_barrelData != null && _barrelData.jumpAmplitude > 0)
-            {
-                float prevTimer = _timer;
-                _timer += Time.deltaTime;
+            // if (_barrelData != null && _barrelData.jumpAmplitude > 0)
+            // {
+            //     float prevTimer = _timer;
+            //     _timer += Time.deltaTime;
 
-                // Calculate vertical delta based on absolute sine wave to create a "bouncing" effect
-                float currentY = Mathf.Abs(Mathf.Sin(_timer * _barrelData.jumpFrequency)) * _barrelData.jumpAmplitude;
-                float prevY = Mathf.Abs(Mathf.Sin(prevTimer * _barrelData.jumpFrequency)) * _barrelData.jumpAmplitude;
-                float deltaY = currentY - prevY;
+            //     // Calculate vertical delta based on absolute sine wave to create a "bouncing" effect
+            //     float currentY = Mathf.Abs(Mathf.Sin(_timer * _barrelData.jumpFrequency)) * _barrelData.jumpAmplitude;
+            //     float prevY = Mathf.Abs(Mathf.Sin(prevTimer * _barrelData.jumpFrequency)) * _barrelData.jumpAmplitude;
+            //     float deltaY = currentY - prevY;
 
-                transform.Translate(new Vector3(0, deltaY, 0), Space.World);
-            }
+            //     transform.Translate(new Vector3(0, deltaY, 0), Space.World);
+            // }
+        }
+
+        protected override void OnCollisionEnter(Collision collision)
+        {
+            base.OnCollisionEnter(collision);
+
+            // add a little upward force
+            _rb.AddForce(Vector3.up * _barrelData.verticleJumpForce, ForceMode.Impulse);
         }
     }
 }
