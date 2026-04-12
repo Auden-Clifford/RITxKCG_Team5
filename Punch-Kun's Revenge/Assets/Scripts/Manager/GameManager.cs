@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms.Impl;
+using TMPro;
 
 public enum GameState
 {
@@ -14,6 +16,8 @@ public enum GameState
 public class GameManager : Singleton<GameManager>
 {
     private float score;
+    [SerializeField] private TextMeshProUGUI scoreLabel;
+
     [SerializeField] private Vector3 scrollSpeed;
     [SerializeField] private Vector3 scrollAcceleration;
     [SerializeField] private float maxScrollSpeed;
@@ -217,7 +221,9 @@ public class GameManager : Singleton<GameManager>
 
     public void AddScore(float amount)
     {
+        Debug.Log("adding score");
         score += amount;
+        scoreLabel.text = "Score: " + score;
     }
 
     // ** Input System Callbacks **
