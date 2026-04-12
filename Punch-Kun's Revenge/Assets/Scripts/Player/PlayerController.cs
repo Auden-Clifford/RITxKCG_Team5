@@ -22,6 +22,11 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float _stunDuration = 2.0f;
     [SerializeField] private float _stunMoveSpeedMultiplier = 0.5f;
 
+    [Space(10)]
+    [Header("Attack Settings")]
+    [SerializeField] private float _attackRange = 2f;
+    [SerializeField] private LayerMask _damagableLayers;
+
     private Camera _mainCam;
     private Rigidbody _rb;
     private float _moveX;
@@ -84,6 +89,10 @@ public class PlayerController : Singleton<PlayerController>
     {
         Debug.LogWarning("************ ATTACKING ***************");
 
+        // ! TEMP
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, _attackRange, Vector3.right, _attackRange, _damagableLayers);
+        foreach (RaycastHit hit in hits)
+            Destroy(hit.collider.gameObject);
     }
 
     private void HandleMove()
@@ -109,5 +118,11 @@ public class PlayerController : Singleton<PlayerController>
         // apply stun for a short duration, then reset
         _isStunned = true;
         StartCoroutine(Timer.WaitFor(_stunDuration, () => _isStunned = false));
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.purple;
+        Gizmos.DrawWireSphere(transform.position, 2f);
     }
 }
