@@ -50,8 +50,6 @@ namespace Barrel
         protected virtual void Move()
         {
             // Move based on direction and speed
-            // Vector3 movement = MoveDir * BarrelSpeed * Time.deltaTime;
-            // transform.Translate(movement, Space.World);
             Vector3 movement = MoveDir * BarrelSpeed;
             _rb.AddForce(movement, ForceMode.Force);
 
