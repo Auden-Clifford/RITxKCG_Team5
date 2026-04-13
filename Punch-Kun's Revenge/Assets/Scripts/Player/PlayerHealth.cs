@@ -1,19 +1,26 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class PlayerHealth : Health
 {
+    [SerializeField] private float invincibilityTime;
+
+    private MeshRenderer meshRenderer;
+    private float invincibilityTimer;
+
     public static event Action OnPlayerTakeDamage = delegate { };
     public static event Action OnPlayerDeath = delegate { };
 
-    [SerializeField] private MeshRenderer meshRenderer;
-
-    private float invincibilityTimer;
-    [SerializeField] private float invincibilityTime;
+    protected override void Start()
+    {
+        base.Start();
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
 
     void Update()
     {
-        if(GameManager.Instance.GameState == GameState.Gameplay)
+        if (GameManager.Instance.GameState == GameState.Gameplay)
         {
             invincibilityTimer -= Time.deltaTime;
 
@@ -35,7 +42,7 @@ public class PlayerHealth : Health
     public override void TakeDamage(int damage)
     {
         // only take damage if the i-frames are done
-        if(invincibilityTimer < 0)
+        if (invincibilityTimer < 0)
         {
             invincibilityTimer = invincibilityTime; // reset the timer
             meshRenderer.enabled = true;
