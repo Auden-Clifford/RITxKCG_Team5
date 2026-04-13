@@ -18,4 +18,4 @@ MonoBehaviour:
   jumpFrequency: 3
   verticleJumpForce: 10
   torqueAmount: 2
-  breakEffectPrefab: {fileID: 0}
+  breakEffectPrefab: {fileID: 8161394705990198746, guid: cbf3f1a46acfd53408d276e651c03974, type: 3}

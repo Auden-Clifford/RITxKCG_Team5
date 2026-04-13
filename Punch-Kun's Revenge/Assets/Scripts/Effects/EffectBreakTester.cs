@@ -13,6 +13,9 @@ namespace Effects
         [Tooltip("The effect prefab you want to test")]
         [SerializeField] private GameObject _testPrefab;
 
+        [Tooltip("The object to use as a visual source (optional)")]
+        [SerializeField] private GameObject _sourceObject;
+
         [Tooltip("Key to trigger the effect")]
         [SerializeField] private Key _triggerKey = Key.Space;
 
@@ -40,7 +43,7 @@ namespace Effects
             GameObject effect = Instantiate(_testPrefab, transform.position, Quaternion.identity);
             if (effect.TryGetComponent(out SampleBreakEffect sbe))
             {
-                sbe.Play();
+                sbe.Play(_sourceObject);
             }
         }
 

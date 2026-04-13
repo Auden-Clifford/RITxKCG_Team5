@@ -46,5 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fragmentCount: 10
   _explosionForce: 5
-  _fragmentScale: 0.3
-  _fragmentColor: {r: 0.5, g: 0.3, b: 0.1, a: 1}
+  _fragmentScale: 0.6
+  _colorOptions:
+  - color: {r: 0.41960788, g: 0.28627452, b: 0.19215688, a: 1}
+    weight: 3
+  - color: {r: 0.28627452, g: 0.19215688, b: 0.11764707, a: 1}
+    weight: 1
+  - color: {r: 0.56078434, g: 0.5568628, b: 0.56078434, a: 1}
+    weight: 1

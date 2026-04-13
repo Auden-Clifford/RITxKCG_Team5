@@ -11,7 +11,7 @@ namespace Barrel
         {
             base.Start();
 
-            // Set horizontal movement values (match normal barrel behavior)
+            // 水平移動の値を設定する（通常の樽の動作に合わせる）
             MoveDir = Vector3.left;
             _timer = 0f;
 
@@ -23,11 +23,11 @@ namespace Barrel
         }
 
         /// <summary>
-        /// Overrides Move to add a bouncing (jumping) effect while maintaining base horizontal movement.
+        /// Moveメソッドをオーバーライドし、基本的な水平移動を維持しつつバウンド（ジャンプ）効果を追加します。
         /// </summary>
         protected override void Move()
         {
-            // 1. Perform base horizontal movement (Translate by MoveDir * BarrelSpeed)
+            // 1. 基本的な水平移動を実行する（MoveDir * BarrelSpeed による移動）
             base.Move();
         }
 
@@ -35,9 +35,9 @@ namespace Barrel
         {
             base.OnCollisionEnter(collision);
 
-            // add a little upward force
+            // 少し上方向の力を加える
             _rb.AddForce((Vector3.left + Vector3.up) * _barrelData.verticleJumpForce, ForceMode.Impulse);
-            // add a little torque
+            // 少し回転力（トルク）を加える
             _rb.AddTorque((Vector3.left + Vector3.up) * _barrelData.torqueAmount, ForceMode.Impulse);
         }
     }

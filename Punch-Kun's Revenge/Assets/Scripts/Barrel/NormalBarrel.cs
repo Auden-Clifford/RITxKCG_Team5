@@ -3,8 +3,8 @@ using UnityEngine;
 namespace Barrel
 {
     /// <summary>
-    /// Standard barrel implementation.
-    /// Moves to the left by default.
+    /// 標準的な樽の実装。
+    /// デフォルトでは左方向に移動します。
     /// </summary>
     public class NormalBarrel : BarrelBase
     {
@@ -12,7 +12,7 @@ namespace Barrel
         {
             base.Start();
 
-            // Set initial movement values
+            // 初期の移動値を設定する
             MoveDir = Vector3.left;
 
             if (_barrelData != null)
@@ -23,8 +23,8 @@ namespace Barrel
         }
 
         /// <summary>
-        /// Overrides Move to add any normal barrel specific behavior if needed.
-        /// Currently uses the base linear movement.
+        /// 必要に応じて通常の樽特有の動作を追加するためにMoveメソッドをオーバーライドします。
+        /// 現在は基底クラスの直線移動を使用しています。
         /// </summary>
         protected override void Move()
         {
