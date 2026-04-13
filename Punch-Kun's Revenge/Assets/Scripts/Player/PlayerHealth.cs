@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityProgressBar;
 
 public class PlayerHealth : Health
 {
@@ -7,6 +8,7 @@ public class PlayerHealth : Health
     public static event Action OnPlayerDeath = delegate { };
 
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private ProgressBar healthBar;
 
     private float invincibilityTimer;
     [SerializeField] private float invincibilityTime;
@@ -41,6 +43,8 @@ public class PlayerHealth : Health
             meshRenderer.enabled = true;
 
             base.TakeDamage(damage);
+
+            healthBar.Value = (float)_currentHealth / (float)_maxHealth;
 
             OnPlayerTakeDamage?.Invoke();
 
