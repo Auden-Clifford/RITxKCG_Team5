@@ -3,17 +3,17 @@ using UnityEngine;
 namespace Barrel
 {
     /// <summary>
-    /// Base class for all barrel types.
-    /// Handles movement, collision detection with environment (break on impact), and destruction.
+    /// すべての樽（バレル）の基底クラス。
+    /// 移動、環境との衝突判定（衝突時に破壊）、および破壊処理を管理します。
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public abstract class BarrelBase : MonoBehaviour, IDamageable
     {
         [Header("Barrel Settings")]
-        [Tooltip("Layer mask for the ground and walls to detect collision and break")]
+        [Tooltip("衝突と破壊を判定するための地面や壁のレイヤーマスク")]
         [SerializeField] protected LayerMask _groundLayer;
 
-        [Tooltip("ScriptableObject containing stats for this barrel")]
+        [Tooltip("この樽のステータス情報を持つ ScriptableObject")]
         [SerializeField] protected BarrelData _barrelData;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Barrel
 
         protected virtual void Start()
         {
-            // Base initialization if needed
+            // 必要に応じた初期化処理
             _rb = GetComponent<Rigidbody>();
         }
 
@@ -45,29 +45,39 @@ namespace Barrel
         }
 
         /// <summary>
-        /// Handles the movement logic of the barrel using BarrelSpeed and MoveDir.
+        /// BarrelSpeedとMoveDirを使用して、樽の移動ロジックを処理します。
         /// </summary>
         protected virtual void Move()
         {
-            // Move based on direction and speed
+            // 方向と速度に基づいて移動する
             Vector3 movement = MoveDir * BarrelSpeed;
             _rb.AddForce(movement, ForceMode.Force);
 
-            // clamp velocity
+            // 速度の制限（クランプ）
             _rb.linearVelocity = Vector3.ClampMagnitude(_rb.linearVelocity, BarrelSpeed);
         }
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
-            // Check if hit the step
-            if (((1 << collision.gameObject.layer) & _groundLayer.value) != 0)
+            // 地面またはプレイヤーに衝突したか確認する
+            if (((1 << collision.gameObject.layer) & _groundLayer.value) != 0 ||
+                collision.gameObject.CompareTag("Player"))
+            {
+                Break();
+            }
+        }
+
+        protected virtual void OnTriggerEnter(Collider other)
+        {
+            // プレイヤーがトリガーを使用している場合の念のための処理
+            if (other.CompareTag("Player"))
             {
                 Break();
             }
         }
 
         /// <summary>
-        /// Implementation of IDamageable. Allows the player to break the barrel.
+        /// IDamageableの実装。プレイヤーからの攻撃で樽を破壊できるようにします。
         /// </summary>
         public void TakeDamage()
         {
@@ -75,21 +85,21 @@ namespace Barrel
         }
 
         /// <summary>
-        /// Handles the destruction of the barrel.
+        /// 樽の破壊処理を行います。
         /// </summary>
         protected virtual void Break()
         {
-            // Spawn break effect if it exists
+            // 破壊エフェクトが設定されていれば生成する
             if (_barrelData != null && _barrelData.breakEffectPrefab != null)
             {
                 GameObject effect = Instantiate(_barrelData.breakEffectPrefab, transform.position, Quaternion.identity);
                 if (effect.TryGetComponent(out Effects.SampleBreakEffect sbe))
                 {
-                    sbe.Play();
+                    sbe.Play(gameObject);
                 }
             }
 
-            // Destroy the barrel object
+            // 樽オブジェクトを破棄する
             Destroy(gameObject);
         }
     }
