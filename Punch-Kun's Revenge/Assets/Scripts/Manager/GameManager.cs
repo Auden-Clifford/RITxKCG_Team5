@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Vector3 scrollAcceleration;
     [SerializeField] private float maxScrollSpeed;
 
-    private GameState gameState;
+    public GameState GameState;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject levelCompleteUI;
     [SerializeField] private GameObject pausedUI;
@@ -62,14 +62,14 @@ public class GameManager : Singleton<GameManager>
 
         // start the game
         Time.timeScale = 1;
-        gameState = GameState.Gameplay;
+        GameState = GameState.Gameplay;
         gameplayUI.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (gameState)
+        switch (GameState)
         {
             case GameState.Gameplay:
                 Camera.main.gameObject.transform.position += scrollSpeed * Time.deltaTime; // move the camera
@@ -146,7 +146,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void PauseGame()
     {
-        gameState = GameState.Paused;
+        GameState = GameState.Paused;
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         pausedUI.SetActive(true);
@@ -161,7 +161,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ResumeGame()
     {
-        gameState = GameState.Gameplay;
+        GameState = GameState.Gameplay;
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
         pausedUI.SetActive(false);
@@ -176,7 +176,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void GameOver()
     {
-        gameState = GameState.GameOver;
+        GameState = GameState.GameOver;
         gameOverUI.SetActive(true);
         levelCompleteUI.SetActive(false);
         pausedUI.SetActive(false);
@@ -191,7 +191,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void LevelComplete()
     {
-        gameState = GameState.LevelComplete;
+        GameState = GameState.LevelComplete;
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(true);
         pausedUI.SetActive(false);
@@ -230,7 +230,7 @@ public class GameManager : Singleton<GameManager>
     private void OnPauseMenu(InputValue val)
     {
         Debug.LogWarning("SHOWING PAUSE MENU");
-        if (gameState != GameState.Paused) PauseGame();
+        if (GameState != GameState.Paused) PauseGame();
         else ResumeGame();
     }
 }
