@@ -29,12 +29,10 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float _attackRange = 2f;
     [SerializeField] private int _damage = 3;
     [SerializeField] private LayerMask _damagableLayers;
-    [SerializeField] private BoxCollider2D attackHitbox;
-    //private Vector3 _attackPosition;
     private Vector3 _attackDirection;
     private Vector3 _mouseScreenPosition;
-    private Vector3 _mouseDirection;
-    private Vector3 _gamepadDirection;
+    private bool _useGamepad;
+
 
     private Camera _mainCam;
     private Rigidbody _rb;
@@ -68,6 +66,13 @@ public class PlayerController : Singleton<PlayerController>
     private void FixedUpdate()
     {
         HandleMove();
+
+        if (!_useGamepad)
+        {
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(_mouseScreenPosition); // world position
+            Vector3 toMouse = mouseWorldPosition - transform.position; // vector from player to mouse
+            _attackDirection = Vector3.Normalize(new Vector3(toMouse.x, 0, 0));
+        }
 
         // apply extra gravity when in the air
         if (!IsGrounded()) _rb.AddForce(Vector3.down * _gravityInAirGravity, ForceMode.Acceleration);
@@ -120,14 +125,13 @@ public class PlayerController : Singleton<PlayerController>
     /// <param name="val"></param>
     private void OnLookMouse(InputValue val)
     {
+        _useGamepad = false;
         _mouseScreenPosition = val.Get<Vector2>(); // screen position
-        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(_mouseScreenPosition); // world position
-        Vector3 toMouse = mouseWorldPosition - transform.position; // vector from player to mouse
-        _attackDirection = Vector3.Normalize(new Vector3(toMouse.x, 0, 0));
     }
 
     private void OnLookGamepad(InputValue val)
     {
+        _useGamepad = true;
         Vector2 stickInput = val.Get<Vector2>();
         _attackDirection = Vector3.Normalize(new Vector3(stickInput.x, 0, 0));
     }
