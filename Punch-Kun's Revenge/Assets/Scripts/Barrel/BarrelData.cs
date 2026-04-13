@@ -25,6 +25,10 @@ namespace Barrel
 
         public float verticleJumpForce = 2f;
 
+        [Header("Torque Settings")]
+        [Tooltip("How much torque is applied to the bouncy barrel to rotate it when it jumps")]
+        public float torqueAmount = 2f;
+
         [Header("Visual Settings")]
         [Tooltip("Visual effect spawned when this barrel breaks")]
         public GameObject breakEffectPrefab;

@@ -29,20 +29,6 @@ namespace Barrel
         {
             // 1. Perform base horizontal movement (Translate by MoveDir * BarrelSpeed)
             base.Move();
-
-            // 2. Add vertical bounce offset
-            // if (_barrelData != null && _barrelData.jumpAmplitude > 0)
-            // {
-            //     float prevTimer = _timer;
-            //     _timer += Time.deltaTime;
-
-            //     // Calculate vertical delta based on absolute sine wave to create a "bouncing" effect
-            //     float currentY = Mathf.Abs(Mathf.Sin(_timer * _barrelData.jumpFrequency)) * _barrelData.jumpAmplitude;
-            //     float prevY = Mathf.Abs(Mathf.Sin(prevTimer * _barrelData.jumpFrequency)) * _barrelData.jumpAmplitude;
-            //     float deltaY = currentY - prevY;
-
-            //     transform.Translate(new Vector3(0, deltaY, 0), Space.World);
-            // }
         }
 
         protected override void OnCollisionEnter(Collision collision)
@@ -50,7 +36,9 @@ namespace Barrel
             base.OnCollisionEnter(collision);
 
             // add a little upward force
-            _rb.AddForce(Vector3.up * _barrelData.verticleJumpForce, ForceMode.Impulse);
+            _rb.AddForce((Vector3.left + Vector3.up) * _barrelData.verticleJumpForce, ForceMode.Impulse);
+            // add a little torque
+            _rb.AddTorque((Vector3.left + Vector3.up) * _barrelData.torqueAmount, ForceMode.Impulse);
         }
     }
 }
