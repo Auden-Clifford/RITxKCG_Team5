@@ -28,13 +28,16 @@ public abstract class BullyMonkey : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] private float _attackRange = 10f;
     [SerializeField] protected int _playerDamage = 1;
-    [SerializeField] protected float _attackCooldown = 2f;
+    //[SerializeField] protected float _attackCooldown = 2f;
 
     protected Rigidbody _rb;
     protected Transform _player;
     protected BullyMonkeyState _state = BullyMonkeyState.Idle;
     protected bool _canMoveTowardsPlayer = false;
     protected bool _isCoolingDown = false;
+
+    protected float _cooldownTimer;
+    [SerializeField] protected float _cooldownTime = 2f;
 
     private void Start()
     {
@@ -51,27 +54,33 @@ public abstract class BullyMonkey : MonoBehaviour
 
     private void Update()
     {
-        // state machine
-        switch (_state)
+        if(GameManager.Instance.GameState == GameState.Gameplay)
         {
-            case BullyMonkeyState.Idle:
-                if (IsPlayerInRange(_startChaseRange))
-                    _state = BullyMonkeyState.MovingTowardsPlayer;
-                break;
+            // state machine
+            switch (_state)
+            {
+                case BullyMonkeyState.Idle:
+                    if (IsPlayerInRange(_startChaseRange))
+                        _state = BullyMonkeyState.MovingTowardsPlayer;
+                    break;
 
-            case BullyMonkeyState.MovingTowardsPlayer:
-                _canMoveTowardsPlayer = true;
+                case BullyMonkeyState.MovingTowardsPlayer:
+                    _canMoveTowardsPlayer = true;
 
-                if (IsPlayerInRange(_attackRange))
-                    _state = BullyMonkeyState.AttackingPlayer;
-                break;
+                    if (IsPlayerInRange(_attackRange))
+                        _state = BullyMonkeyState.AttackingPlayer;
+                    break;
 
-            case BullyMonkeyState.AttackingPlayer:
-                _canMoveTowardsPlayer = false;
+                case BullyMonkeyState.AttackingPlayer:
+                    _canMoveTowardsPlayer = false;
 
-                if (!_isCoolingDown)
-                    AttackPlayer();
-                break;
+                    if (_cooldownTimer < 0)
+                        AttackPlayer();
+                    break;
+            }
+
+            // reduce cooldown
+            _cooldownTimer -= Time.deltaTime;
         }
     }
 
@@ -105,16 +114,7 @@ public abstract class BullyMonkey : MonoBehaviour
         // TODO: Implementation for attacking the player
         Debug.LogError("Attacking player!");
 
-        // ! needed to add a cooldown for attacking the player, otherwise it will just keep damaging the player every frame when in range
-        // TODO: maybe add an attack animation and only apply DAMAGE to player at a certain frame of the animation, then start cooldown after the animation is done
-        _isCoolingDown = true;
-        // _rb.constraints = RigidbodyConstraints.FreezeAll;   // freeze the bully monkey in place after attacking for cooldown
-        StartCoroutine(Timer.WaitFor(_attackCooldown, () =>
-        {
-            _isCoolingDown = false;
-            _state = BullyMonkeyState.Idle;
-            // _rb.constraints = RigidbodyConstraints.FreezeRotation;   // unfreeze the position of bully monkey after cooldown
-        }));
+        _cooldownTimer = _cooldownTime;
     }
 
     // ! Just for debugging

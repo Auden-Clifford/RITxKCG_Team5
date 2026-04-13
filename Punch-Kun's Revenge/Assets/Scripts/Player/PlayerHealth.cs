@@ -1,22 +1,56 @@
 using System;
+using UnityEngine;
 
 public class PlayerHealth : Health
 {
     public static event Action OnPlayerTakeDamage = delegate { };
     public static event Action OnPlayerDeath = delegate { };
 
+    [SerializeField] private MeshRenderer meshRenderer;
+
+    private float invincibilityTimer;
+    [SerializeField] private float invincibilityTime;
+
+    void Update()
+    {
+        if(GameManager.Instance.GameState == GameState.Gameplay)
+        {
+            invincibilityTimer -= Time.deltaTime;
+
+            // flicker the player model while invincible
+            if (invincibilityTimer > 0)
+            {
+                if ((int)(invincibilityTimer * 20) % 2 == 1)
+                {
+                    meshRenderer.enabled = false;
+                }
+                else
+                {
+                    meshRenderer.enabled = true;
+                }
+            }
+        }
+    }
+
     public override void TakeDamage(int damage)
     {
-        base.TakeDamage(damage);
-
-        OnPlayerTakeDamage?.Invoke();
-
-        // ** lose condition **
-        if (_currentHealth == 0)
+        // only take damage if the i-frames are done
+        if(invincibilityTimer < 0)
         {
-            OnPlayerDeath?.Invoke();
-            if (GameManager.Instance != null)
-                GameManager.Instance.GameOver();
+            invincibilityTimer = invincibilityTime; // reset the timer
+            meshRenderer.enabled = true;
+
+            base.TakeDamage(damage);
+
+            OnPlayerTakeDamage?.Invoke();
+
+            // ** lose condition **
+            if (_currentHealth == 0)
+            {
+                OnPlayerDeath?.Invoke();
+                if (GameManager.Instance != null)
+                    GameManager.Instance.GameOver();
+            }
         }
     }
 
