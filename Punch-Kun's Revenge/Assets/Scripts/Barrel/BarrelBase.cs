@@ -14,7 +14,7 @@ namespace Barrel
         [SerializeField] protected LayerMask _groundLayer;
 
         [Tooltip("ScriptableObject containing stats for this barrel")]
-        [SerializeField] protected Barrel.BarrelData _barrelData;
+        [SerializeField] protected BarrelData _barrelData;
 
         /// <summary>
         /// 樽の移動速度を保持するプロパティ

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: NewBarrelData
   m_EditorClassIdentifier: 
   barrelType: 1
-  moveSpeed: 5
+  moveSpeed: 8
   jumpAmplitude: 2
   jumpFrequency: 3
-  verticleJumpForce: 15
+  verticleJumpForce: 10
+  torqueAmount: 2
   breakEffectPrefab: {fileID: 0}
