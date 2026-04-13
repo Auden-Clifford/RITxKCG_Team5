@@ -1,17 +1,18 @@
 using System;
 using UnityEngine;
+using UnityProgressBar;
 
 [RequireComponent(typeof(MeshRenderer))]
 public class PlayerHealth : Health
 {
-    [SerializeField] private float invincibilityTime;
-
-    private MeshRenderer meshRenderer;
-    private float invincibilityTimer;
-
     public static event Action OnPlayerTakeDamage = delegate { };
     public static event Action OnPlayerDeath = delegate { };
 
+    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private ProgressBar healthBar;
+
+    private float invincibilityTimer;
+    [SerializeField] private float invincibilityTime;
     protected override void Start()
     {
         base.Start();
@@ -48,6 +49,8 @@ public class PlayerHealth : Health
             meshRenderer.enabled = true;
 
             base.TakeDamage(damage);
+
+            healthBar.Value = (float)_currentHealth / (float)_maxHealth;
 
             OnPlayerTakeDamage?.Invoke();
 
