@@ -82,7 +82,11 @@ namespace Barrel
             // Spawn break effect if it exists
             if (_barrelData != null && _barrelData.breakEffectPrefab != null)
             {
-                Instantiate(_barrelData.breakEffectPrefab, transform.position, Quaternion.identity);
+                GameObject effect = Instantiate(_barrelData.breakEffectPrefab, transform.position, Quaternion.identity);
+                if (effect.TryGetComponent(out Effects.SampleBreakEffect sbe))
+                {
+                    sbe.Play();
+                }
             }
 
             // Destroy the barrel object

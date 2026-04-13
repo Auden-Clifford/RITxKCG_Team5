@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c45a85d4963264bae5741303cd3606, type: 3}
   m_Name: NewBarrelData
   m_EditorClassIdentifier: 
-  barrelType: 1
+  barrelType: 0
   moveSpeed: 8
   jumpAmplitude: 2
   jumpFrequency: 3
