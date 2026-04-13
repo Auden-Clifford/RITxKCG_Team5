@@ -110,12 +110,12 @@ public class PlayerController : Singleton<PlayerController>
         //    Destroy(hit.collider.gameObject);
 
 
-        Vector3 attackPosition = transform.position + _attackDirection; 
-        List<Collider> HitObjects = new List<Collider>(Physics.OverlapBox(attackPosition, new Vector3(1, 0.75f, 1), Quaternion.identity, _damagableLayers));
-        foreach(Collider collider in HitObjects)
+        Vector3 attackPosition = transform.position + _attackDirection;
+        List<Collider> HitObjects = new(Physics.OverlapBox(attackPosition, new Vector3(1, 0.75f, 1), Quaternion.identity, _damagableLayers));
+        foreach (Collider collider in HitObjects)
         {
             Debug.Log("hit");
-            collider.gameObject.GetComponent<Health>().TakeDamage(_damage);
+            if (collider.gameObject.TryGetComponent(out Health health)) health.TakeDamage(_damage);
         }
     }
 
