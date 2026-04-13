@@ -29,13 +29,9 @@ public class PlayerHealth : Health
             if (invincibilityTimer > 0)
             {
                 if ((int)(invincibilityTimer * 20) % 2 == 1)
-                {
                     meshRenderer.enabled = false;
-                }
                 else
-                {
                     meshRenderer.enabled = true;
-                }
             }
         }
     }
@@ -50,7 +46,7 @@ public class PlayerHealth : Health
 
             base.TakeDamage(damage);
 
-            healthBar.Value = (float)_currentHealth / (float)_maxHealth;
+            healthBar.Value = (float)_currentHealth / _maxHealth;
 
             OnPlayerTakeDamage?.Invoke();
 

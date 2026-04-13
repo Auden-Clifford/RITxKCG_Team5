@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5553016828195607372}
   - component: {fileID: 1709209075646458262}
   - component: {fileID: 5172352470396980702}
+  - component: {fileID: 4781373584136588326}
   m_Layer: 7
   m_Name: Bouncy Barrel
   m_TagString: Untagged
@@ -110,6 +111,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   _barrelData: {fileID: 11400000, guid: 4b1931b242f20df42884269ef5bb8b69, type: 2}
+--- !u!114 &4781373584136588326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8705712110159800726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4daf82600ef6c1449b6c9ee7dc3fd49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 1
+  score: 0
 --- !u!1001 &2332903125627920805
 PrefabInstance:
   m_ObjectHideFlags: 0

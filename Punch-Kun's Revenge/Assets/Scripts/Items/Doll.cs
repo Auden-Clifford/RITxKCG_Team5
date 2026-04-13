@@ -11,6 +11,5 @@ public class Doll : Item
             GameManager.Instance.AddScore(score);
             GameManager.Instance.LevelComplete();
         }
-            
     }
 }
