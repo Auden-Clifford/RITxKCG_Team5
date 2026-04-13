@@ -5,11 +5,6 @@ using UnityProgressBar;
 [RequireComponent(typeof(MeshRenderer))]
 public class PlayerHealth : Health
 {
-    [SerializeField] private float invincibilityTime;
-
-    private MeshRenderer meshRenderer;
-    private float invincibilityTimer;
-
     public static event Action OnPlayerTakeDamage = delegate { };
     public static event Action OnPlayerDeath = delegate { };
 
