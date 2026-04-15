@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using Unity.Mathematics;
 
-[RequireComponent(typeof(Rigidbody), typeof(PlayerInput))]
+[RequireComponent(typeof(Rigidbody), typeof(PlayerInput), typeof(Animator))]
 public class PlayerController : Singleton<PlayerController>
 {
     [Header("Movement Settings")]
@@ -17,6 +16,7 @@ public class PlayerController : Singleton<PlayerController>
     [Space(10)]
     [Header("Jump Settings")]
     [SerializeField] private float _groundCheckDistance = 1.3f;
+    [SerializeField] private float _groundCheckOffset = 0.1f;   // need to lift off the ground a bit
     [SerializeField] private LayerMask _groundLayer;
 
     [Space(10)]
@@ -27,6 +27,8 @@ public class PlayerController : Singleton<PlayerController>
     [Space(10)]
     [Header("Attack Settings")]
     [SerializeField] private float _attackRange = 2f;
+    [SerializeField] private Vector3 _attackHitBoxSize = new(1, 0.75f, 1);
+    [SerializeField] private float _attackHitBoxYOffset = 0.5f;
     [SerializeField] private int _damage = 3;
     [SerializeField] private LayerMask _damagableLayers;
 
@@ -35,8 +37,21 @@ public class PlayerController : Singleton<PlayerController>
     private bool _useGamepad;
     private Camera _mainCam;
     private Rigidbody _rb;
+    private Animator _animator;
     private float _moveX;
     private bool _isStunned;
+
+    // animator hashes
+    private int _isRunningHash;
+    private int _isJumpingHash;
+    private int _isAttackingHash;
+    private int _isHitHash;
+
+    // animator params
+    private const string RUN = "Speed";
+    private const string ATTACK = "Attack";
+    private const string JUMP = "Jump";
+    private const string Hit = "Got_Hit";
 
     private void OnEnable()
     {
@@ -54,24 +69,28 @@ public class PlayerController : Singleton<PlayerController>
 
         _isStunned = false;
         _rb = GetComponent<Rigidbody>();
-        //_attackPosition = Vector3.zero;
+        _animator = GetComponent<Animator>();
     }
 
     private void Start()
     {
         _mainCam = Camera.main;
+
+        // setting animator hashes
+        _isRunningHash = Animator.StringToHash(RUN);
+        _isJumpingHash = Animator.StringToHash(JUMP);
+        _isAttackingHash = Animator.StringToHash(ATTACK);
+        _isHitHash = Animator.StringToHash(Hit);
+    }
+
+    private void Update()
+    {
+        _animator.SetFloat(_isRunningHash, Mathf.Abs(_rb.linearVelocity.x));
     }
 
     private void FixedUpdate()
     {
         HandleMove();
-
-        if (!_useGamepad)
-        {
-            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(_mouseScreenPosition); // world position
-            Vector3 toMouse = mouseWorldPosition - transform.position; // vector from player to mouse
-            _attackDirection = Vector3.Normalize(new Vector3(toMouse.x, 0, 0));
-        }
 
         // apply extra gravity when in the air
         if (!IsGrounded()) _rb.AddForce(Vector3.down * _gravityInAirGravity, ForceMode.Acceleration);
@@ -90,49 +109,22 @@ public class PlayerController : Singleton<PlayerController>
     private void OnMove(InputValue val)
     {
         _moveX = val.Get<Vector2>().x;
-
-        if (_moveX == 0) return;
-
-        // TODO: rotate player in the direction of movement
-        // FlipPlayerHorizontally(_moveX < 0);
     }
 
     private void OnJump(InputValue val) => HandleJump();
 
     private void OnAttack(InputValue val)
     {
-        Debug.LogWarning("************ ATTACKING ***************");
+        _animator.SetTrigger(_isAttackingHash);
 
-        // ! TEMP
-        //RaycastHit[] hits = Physics.SphereCastAll(transform.position, _attackRange, Vector3.right, _attackRange, _damagableLayers);
-        //foreach (RaycastHit hit in hits)
-        //    Destroy(hit.collider.gameObject);
-
-
-        Vector3 attackPosition = transform.position + _attackDirection;
-        List<Collider> HitObjects = new(Physics.OverlapBox(attackPosition, new Vector3(1, 0.75f, 1), Quaternion.identity, _damagableLayers));
+        Vector3 attackPosition = transform.position + transform.forward + Vector3.up * _attackHitBoxYOffset + _attackDirection;
+        List<Collider> HitObjects = new(Physics.OverlapBox(attackPosition, _attackHitBoxSize, Quaternion.identity, _damagableLayers));
         foreach (Collider collider in HitObjects)
         {
             Debug.Log("hit");
             if (collider.gameObject.TryGetComponent(out Health health)) health.TakeDamage(_damage);
+            CameraController.Instance.Shake(1f);
         }
-    }
-
-    /// <summary>
-    /// Rotates the attack hitbox towards the mouse
-    /// </summary>
-    /// <param name="val"></param>
-    private void OnLookMouse(InputValue val)
-    {
-        _useGamepad = false;
-        _mouseScreenPosition = val.Get<Vector2>(); // screen position
-    }
-
-    private void OnLookGamepad(InputValue val)
-    {
-        _useGamepad = true;
-        Vector2 stickInput = val.Get<Vector2>();
-        _attackDirection = Vector3.Normalize(new Vector3(stickInput.x, 0, 0));
     }
 
     private void HandleMove()
@@ -141,6 +133,9 @@ public class PlayerController : Singleton<PlayerController>
         Vector3 targetVelocity = new(_moveX * currentSpeed, _rb.linearVelocity.y, 0);
         Vector3 velocityChange = targetVelocity - _rb.linearVelocity;
         _rb.AddForce(velocityChange, ForceMode.VelocityChange);
+
+        // rotate player in the direction of movement
+        transform.rotation = Quaternion.Euler(0, _moveX < 0 ? 270 : 90, 0);
     }
 
     private void HandleJump()
@@ -148,23 +143,27 @@ public class PlayerController : Singleton<PlayerController>
         // prevent jumping if not grounded
         if (!IsGrounded()) return;
 
+        _animator.SetTrigger(_isJumpingHash);
+
         _rb.AddForce(_jumpForce * (Vector3.up + new Vector3(_moveX, 0, 0)), ForceMode.Impulse);
     }
 
-    private bool IsGrounded() => Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance, _groundLayer);
+    private bool IsGrounded() => Physics.Raycast(transform.position + Vector3.up * _groundCheckOffset, Vector3.down, _groundCheckDistance, _groundLayer);
 
     private void GetStunned()
     {
         // apply stun for a short duration, then reset
         _isStunned = true;
         StartCoroutine(Timer.WaitFor(_stunDuration, () => _isStunned = false));
+
+        // got hit animation
+        _animator.SetTrigger(_isHitHash);
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.purple;
-        Gizmos.DrawWireSphere(transform.position, 2f);
-        Vector3 attackPosition = transform.position + _attackDirection;
-        Gizmos.DrawWireCube(attackPosition, new Vector3(2, 1.5f, 1));
+        Vector3 attackPosition = transform.position + transform.forward + Vector3.up * _attackHitBoxYOffset + _attackDirection;
+        Gizmos.DrawWireCube(attackPosition, _attackHitBoxSize * 2);
     }
 }

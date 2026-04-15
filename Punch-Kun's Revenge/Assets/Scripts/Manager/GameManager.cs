@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms.Impl;
 using TMPro;
 
 public enum GameState
@@ -45,6 +44,7 @@ public class GameManager : Singleton<GameManager>
     private List<GameObject> enemies;
     private List<GameObject> obstacles;
     private List<GameObject> healingItems;
+    private CameraController _cameraController;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -64,6 +64,13 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = 1;
         GameState = GameState.Gameplay;
         gameplayUI.SetActive(true);
+
+        _cameraController = CameraController.Instance;
+        if (_cameraController == null)
+        {
+            Debug.LogError("CameraController not found!");
+            enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -72,7 +79,8 @@ public class GameManager : Singleton<GameManager>
         switch (GameState)
         {
             case GameState.Gameplay:
-                Camera.main.gameObject.transform.position += scrollSpeed * Time.deltaTime; // move the camera
+                _cameraController.MainCineCam.transform.Translate(scrollSpeed * Time.deltaTime);    // move the camera
+
                 float newScrollSpeed = Mathf.Clamp(scrollSpeed.x + scrollAcceleration.x * Time.deltaTime, 0, maxScrollSpeed); // accelerate
                 scrollSpeed.x = newScrollSpeed;
 
@@ -111,10 +119,10 @@ public class GameManager : Singleton<GameManager>
     private void ResetScene()
     {
         score = 0;
-        Camera.main.gameObject.transform.position = new Vector3(0, 0, -10);
         enemySpawnTimer = enemySpawnDelay;
         obstacleSpawnTimer = obstacleSpawnDelay;
         healthItemSpawnTimer = healthItemSpawnDelay;
+
         for (int i = 0; i < enemies.Count; i++)
         {
             Destroy(enemies[i]);

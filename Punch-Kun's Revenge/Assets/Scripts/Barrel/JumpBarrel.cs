@@ -1,19 +1,15 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Barrel
 {
     public class JumpBarrel : BarrelBase
     {
-        private float _timer;
-
         protected override void Start()
         {
             base.Start();
 
             // 水平移動の値を設定する（通常の樽の動作に合わせる）
             MoveDir = Vector3.left;
-            _timer = 0f;
 
             if (_barrelData != null)
             {
