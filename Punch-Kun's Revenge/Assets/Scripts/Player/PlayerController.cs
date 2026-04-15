@@ -92,13 +92,6 @@ public class PlayerController : Singleton<PlayerController>
     {
         HandleMove();
 
-        // if (!_useGamepad)
-        // {
-        //     Vector3 mouseWorldPosition = _mainCam.ScreenToWorldPoint(_mouseScreenPosition); // world position
-        //     Vector3 toMouse = mouseWorldPosition - transform.position; // vector from player to mouse
-        //     _attackDirection = Vector3.Normalize(new Vector3(toMouse.x, 0, 0));
-        // }
-
         // apply extra gravity when in the air
         if (!IsGrounded()) _rb.AddForce(Vector3.down * _gravityInAirGravity, ForceMode.Acceleration);
     }
@@ -130,25 +123,9 @@ public class PlayerController : Singleton<PlayerController>
         {
             Debug.Log("hit");
             if (collider.gameObject.TryGetComponent(out Health health)) health.TakeDamage(_damage);
+            CameraController.Instance.Shake(1f);
         }
     }
-
-    /// <summary>
-    /// Rotates the attack hitbox towards the mouse
-    /// </summary>
-    /// <param name="val"></param>
-    // private void OnLookMouse(InputValue val)
-    // {
-    //     _useGamepad = false;
-    //     _mouseScreenPosition = val.Get<Vector2>(); // screen position
-    // }
-
-    // private void OnLookGamepad(InputValue val)
-    // {
-    //     _useGamepad = true;
-    //     Vector2 stickInput = val.Get<Vector2>();
-    //     _attackDirection = Vector3.Normalize(new Vector3(stickInput.x, 0, 0));
-    // }
 
     private void HandleMove()
     {
