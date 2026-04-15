@@ -16,6 +16,7 @@ public class PlayerController : Singleton<PlayerController>
     [Space(10)]
     [Header("Jump Settings")]
     [SerializeField] private float _groundCheckDistance = 1.3f;
+    [SerializeField] private float _groundCheckOffset = 0.1f;   // need to lift off the ground a bit
     [SerializeField] private LayerMask _groundLayer;
 
     [Space(10)]
@@ -26,6 +27,8 @@ public class PlayerController : Singleton<PlayerController>
     [Space(10)]
     [Header("Attack Settings")]
     [SerializeField] private float _attackRange = 2f;
+    [SerializeField] private Vector3 _attackHitBoxSize = new(1, 0.75f, 1);
+    [SerializeField] private float _attackHitBoxYOffset = 0.5f;
     [SerializeField] private int _damage = 3;
     [SerializeField] private LayerMask _damagableLayers;
 
@@ -89,12 +92,12 @@ public class PlayerController : Singleton<PlayerController>
     {
         HandleMove();
 
-        if (!_useGamepad)
-        {
-            Vector3 mouseWorldPosition = _mainCam.ScreenToWorldPoint(_mouseScreenPosition); // world position
-            Vector3 toMouse = mouseWorldPosition - transform.position; // vector from player to mouse
-            _attackDirection = Vector3.Normalize(new Vector3(toMouse.x, 0, 0));
-        }
+        // if (!_useGamepad)
+        // {
+        //     Vector3 mouseWorldPosition = _mainCam.ScreenToWorldPoint(_mouseScreenPosition); // world position
+        //     Vector3 toMouse = mouseWorldPosition - transform.position; // vector from player to mouse
+        //     _attackDirection = Vector3.Normalize(new Vector3(toMouse.x, 0, 0));
+        // }
 
         // apply extra gravity when in the air
         if (!IsGrounded()) _rb.AddForce(Vector3.down * _gravityInAirGravity, ForceMode.Acceleration);
@@ -119,17 +122,10 @@ public class PlayerController : Singleton<PlayerController>
 
     private void OnAttack(InputValue val)
     {
-        Debug.LogWarning("************ ATTACKING ***************");
-
-        // ! TEMP
-        //RaycastHit[] hits = Physics.SphereCastAll(transform.position, _attackRange, Vector3.right, _attackRange, _damagableLayers);
-        //foreach (RaycastHit hit in hits)
-        //    Destroy(hit.collider.gameObject);
-
         _animator.SetTrigger(_isAttackingHash);
 
-        Vector3 attackPosition = transform.position + _attackDirection;
-        List<Collider> HitObjects = new(Physics.OverlapBox(attackPosition, new Vector3(1, 0.75f, 1), Quaternion.identity, _damagableLayers));
+        Vector3 attackPosition = transform.position + transform.forward + Vector3.up * _attackHitBoxYOffset + _attackDirection;
+        List<Collider> HitObjects = new(Physics.OverlapBox(attackPosition, _attackHitBoxSize, Quaternion.identity, _damagableLayers));
         foreach (Collider collider in HitObjects)
         {
             Debug.Log("hit");
@@ -141,18 +137,18 @@ public class PlayerController : Singleton<PlayerController>
     /// Rotates the attack hitbox towards the mouse
     /// </summary>
     /// <param name="val"></param>
-    private void OnLookMouse(InputValue val)
-    {
-        _useGamepad = false;
-        _mouseScreenPosition = val.Get<Vector2>(); // screen position
-    }
+    // private void OnLookMouse(InputValue val)
+    // {
+    //     _useGamepad = false;
+    //     _mouseScreenPosition = val.Get<Vector2>(); // screen position
+    // }
 
-    private void OnLookGamepad(InputValue val)
-    {
-        _useGamepad = true;
-        Vector2 stickInput = val.Get<Vector2>();
-        _attackDirection = Vector3.Normalize(new Vector3(stickInput.x, 0, 0));
-    }
+    // private void OnLookGamepad(InputValue val)
+    // {
+    //     _useGamepad = true;
+    //     Vector2 stickInput = val.Get<Vector2>();
+    //     _attackDirection = Vector3.Normalize(new Vector3(stickInput.x, 0, 0));
+    // }
 
     private void HandleMove()
     {
@@ -175,7 +171,7 @@ public class PlayerController : Singleton<PlayerController>
         _rb.AddForce(_jumpForce * (Vector3.up + new Vector3(_moveX, 0, 0)), ForceMode.Impulse);
     }
 
-    private bool IsGrounded() => Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance, _groundLayer);
+    private bool IsGrounded() => Physics.Raycast(transform.position + Vector3.up * _groundCheckOffset, Vector3.down, _groundCheckDistance, _groundLayer);
 
     private void GetStunned()
     {
@@ -190,8 +186,7 @@ public class PlayerController : Singleton<PlayerController>
     void OnDrawGizmos()
     {
         Gizmos.color = Color.purple;
-        Gizmos.DrawWireSphere(transform.position, 2f);
-        Vector3 attackPosition = transform.position + _attackDirection;
-        Gizmos.DrawWireCube(attackPosition, new Vector3(2, 1.5f, 1));
+        Vector3 attackPosition = transform.position + transform.forward + Vector3.up * _attackHitBoxYOffset + _attackDirection;
+        Gizmos.DrawWireCube(attackPosition, _attackHitBoxSize * 2);
     }
 }
