@@ -2,61 +2,54 @@ using System;
 using UnityEngine;
 using UnityProgressBar;
 
-[RequireComponent(typeof(MeshRenderer))]
 public class PlayerHealth : Health
 {
+    [SerializeField] private SkinnedMeshRenderer meshRenderer;
+    [SerializeField] private ProgressBar healthBar;
+    [SerializeField] private float invincibilityTime;
+
+    private float invincibilityTimer;
+
     public static event Action OnPlayerTakeDamage = delegate { };
     public static event Action OnPlayerDeath = delegate { };
 
-    [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private ProgressBar healthBar;
-
-    private float invincibilityTimer;
-    [SerializeField] private float invincibilityTime;
-    protected override void Start()
-    {
-        base.Start();
-        meshRenderer = GetComponent<MeshRenderer>();
-    }
-
     void Update()
     {
-        if (GameManager.Instance.GameState == GameState.Gameplay)
-        {
+        if (GameManager.Instance.GameState != GameState.Gameplay) return;
+
+        if (invincibilityTimer >= 0)
             invincibilityTimer -= Time.deltaTime;
 
-            // flicker the player model while invincible
-            if (invincibilityTimer > 0)
-            {
-                if ((int)(invincibilityTimer * 20) % 2 == 1)
-                    meshRenderer.enabled = false;
-                else
-                    meshRenderer.enabled = true;
-            }
+        // flicker the player model while invincible
+        if (invincibilityTimer >= 0)
+        {
+            if ((int)(invincibilityTimer * 20) % 2 == 1)
+                meshRenderer.enabled = false;
+            else
+                meshRenderer.enabled = true;
         }
     }
 
     public override void TakeDamage(int damage)
     {
         // only take damage if the i-frames are done
-        if (invincibilityTimer < 0)
+        if (invincibilityTimer >= 0) return;
+
+        invincibilityTimer = invincibilityTime; // reset the timer
+        meshRenderer.enabled = true;
+
+        base.TakeDamage(damage);
+
+        healthBar.Value = (float)_currentHealth / _maxHealth;
+
+        OnPlayerTakeDamage?.Invoke();
+
+        // ** lose condition **
+        if (_currentHealth == 0)
         {
-            invincibilityTimer = invincibilityTime; // reset the timer
-            meshRenderer.enabled = true;
-
-            base.TakeDamage(damage);
-
-            healthBar.Value = (float)_currentHealth / _maxHealth;
-
-            OnPlayerTakeDamage?.Invoke();
-
-            // ** lose condition **
-            if (_currentHealth == 0)
-            {
-                OnPlayerDeath?.Invoke();
-                if (GameManager.Instance != null)
-                    GameManager.Instance.GameOver();
-            }
+            OnPlayerDeath?.Invoke();
+            if (GameManager.Instance != null)
+                GameManager.Instance.GameOver();
         }
     }
 
