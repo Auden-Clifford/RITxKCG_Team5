@@ -154,9 +154,6 @@ public abstract class BullyMonkey : MonoBehaviour
 
     protected virtual void AttackPlayer()
     {
-        // TODO: Implementation for attacking the player
-        Debug.LogError("Attacking player!");
-
         _cooldownTimer = _attackCooldown;
         _state = BullyMonkeyState.Idle;
     }
