@@ -4,6 +4,8 @@ public class BullyMonkeyHealth : Health
 {
     [SerializeField] private float score;
 
+    public event System.Action OnBullyMonkeyDeath = delegate { };
+
     protected override void Start()
     {
         base.Start();
@@ -19,7 +21,10 @@ public class BullyMonkeyHealth : Health
             Debug.Log("I died");
             if (GameManager.Instance != null)
                 GameManager.Instance.AddScore(score);
-            Destroy(gameObject);
+
+            // Destroy(gameObject);
+            // playing animation instead of destroying
+            OnBullyMonkeyDeath?.Invoke();
         }
     }
 }

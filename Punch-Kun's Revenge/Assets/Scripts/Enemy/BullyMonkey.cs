@@ -13,7 +13,7 @@ public enum BullyMonkeyState
 /// - Move towards player
 /// - Attack player when in range
 /// </summary>
-[RequireComponent(typeof(Rigidbody), typeof(Animator))]
+[RequireComponent(typeof(Rigidbody), typeof(Animator), typeof(BullyMonkeyHealth))]
 public abstract class BullyMonkey : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -33,6 +33,7 @@ public abstract class BullyMonkey : MonoBehaviour
     protected Rigidbody _rb;
     protected Transform _player;
     protected Animator _animator;
+    protected BullyMonkeyHealth _health;
     protected BullyMonkeyState _state = BullyMonkeyState.Idle;
     protected bool _canMoveTowardsPlayer = false;
     protected float _cooldownTimer;
@@ -53,10 +54,20 @@ public abstract class BullyMonkey : MonoBehaviour
     private const string JUMP = "Jump";
     private const string DEAD = "Dead";
 
+    void OnDestroy()
+    {
+        // detach event
+        _health.OnBullyMonkeyDeath -= OnBullyMonkeyDeath;
+    }
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+        _health = GetComponent<BullyMonkeyHealth>();
+
+        // attach event for this perticular monkey
+        _health.OnBullyMonkeyDeath += OnBullyMonkeyDeath;
     }
 
     private void Start()
@@ -148,6 +159,19 @@ public abstract class BullyMonkey : MonoBehaviour
 
         _cooldownTimer = _attackCooldown;
         _state = BullyMonkeyState.Idle;
+    }
+
+    private void OnBullyMonkeyDeath()
+    {
+        _animator.SetTrigger(_isDeadHash);
+
+        // stoping everything
+        _rb.isKinematic = true;
+        if (TryGetComponent(out Collider col))
+            col.enabled = false;
+        if (TryGetComponent(out Health health))
+            health.enabled = false;
+        enabled = false;
     }
 
     // ! Just for debugging
