@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7431151652525194772}
   - component: {fileID: 3544709875327321936}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Barrel Break Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

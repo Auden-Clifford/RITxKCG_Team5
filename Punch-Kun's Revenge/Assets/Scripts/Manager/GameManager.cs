@@ -253,7 +253,6 @@ public class GameManager : Singleton<GameManager>
     // ** Input System Callbacks **
     private void OnPauseMenu(InputValue val)
     {
-        Debug.LogWarning("SHOWING PAUSE MENU");
         if (GameState != GameState.Paused) PauseGame();
         else ResumeGame();
     }
