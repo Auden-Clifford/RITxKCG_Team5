@@ -7,6 +7,6 @@ namespace Barrel
     {
         Normal,
         Jump,
-        // 必要に応じてここに新しい樽の種類を追加してください
+        Throwable
     }
 }

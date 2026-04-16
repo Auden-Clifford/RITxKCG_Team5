@@ -71,6 +71,8 @@ public class GameManager : Singleton<GameManager>
             Debug.LogError("CameraController not found!");
             enabled = false;
         }
+
+        ShowCursor(false);
     }
 
     // Update is called once per frame
@@ -116,6 +118,12 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private void ShowCursor(bool showCursor)
+    {
+        Cursor.visible = showCursor;
+        Cursor.lockState = showCursor ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
     private void ResetScene()
     {
         score = 0;
@@ -154,6 +162,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void PauseGame()
     {
+        ShowCursor(true);
+
         GameState = GameState.Paused;
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
@@ -169,6 +179,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ResumeGame()
     {
+        ShowCursor(false);
+
         GameState = GameState.Gameplay;
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
@@ -184,6 +196,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void GameOver()
     {
+        ShowCursor(true);
+
         GameState = GameState.GameOver;
         gameOverUI.SetActive(true);
         levelCompleteUI.SetActive(false);
@@ -199,6 +213,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void LevelComplete()
     {
+        ShowCursor(true);
+
         GameState = GameState.LevelComplete;
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(true);

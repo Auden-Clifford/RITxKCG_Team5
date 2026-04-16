@@ -33,8 +33,6 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private LayerMask _damagableLayers;
 
     private Vector3 _attackDirection;
-    private Vector3 _mouseScreenPosition;
-    private bool _useGamepad;
     private Camera _mainCam;
     private Rigidbody _rb;
     private Animator _animator;
