@@ -57,24 +57,7 @@ namespace Barrel
             _rb.linearVelocity = Vector3.ClampMagnitude(_rb.linearVelocity, BarrelSpeed);
         }
 
-        protected virtual void OnCollisionEnter(Collision collision)
-        {
-            // 地面またはプレイヤーに衝突したか確認する
-            if (((1 << collision.gameObject.layer) & _groundLayer.value) != 0 ||
-                collision.gameObject.CompareTag("Player"))
-            {
-                Break();
-            }
-        }
-
-        protected virtual void OnTriggerEnter(Collider other)
-        {
-            // プレイヤーがトリガーを使用している場合の念のための処理
-            if (other.CompareTag("Player"))
-            {
-                Break();
-            }
-        }
+        protected virtual void OnCollisionEnter(Collision collision) { }
 
         /// <summary>
         /// IDamageableの実装。プレイヤーからの攻撃で樽を破壊できるようにします。

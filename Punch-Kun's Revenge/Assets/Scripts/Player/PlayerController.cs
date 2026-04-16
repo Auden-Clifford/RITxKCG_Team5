@@ -26,11 +26,7 @@ public class PlayerController : Singleton<PlayerController>
 
     [Space(10)]
     [Header("Attack Settings")]
-    [SerializeField] private float _attackRange = 2f;
-    [SerializeField] private Vector3 _attackHitBoxSize = new(1, 0.75f, 1);
-    [SerializeField] private float _attackHitBoxYOffset = 0.5f;
-    [SerializeField] private int _damage = 3;
-    [SerializeField] private LayerMask _damagableLayers;
+    [SerializeField] private int _damageToEnemy = 3;
 
     private Vector3 _attackDirection;
     private Camera _mainCam;
@@ -38,6 +34,7 @@ public class PlayerController : Singleton<PlayerController>
     private Animator _animator;
     private float _moveX;
     private bool _isStunned;
+    private bool _isAttacking;
 
     // animator hashes
     private int _isRunningHash;
@@ -50,6 +47,9 @@ public class PlayerController : Singleton<PlayerController>
     private const string ATTACK = "Attack";
     private const string JUMP = "Jump";
     private const string Hit = "Got_Hit";
+
+    public bool IsAttacking => _isAttacking;
+    public int DamageOnAttack => _damageToEnemy;
 
     private void OnEnable()
     {
@@ -66,6 +66,7 @@ public class PlayerController : Singleton<PlayerController>
         base.Awake();
 
         _isStunned = false;
+        _isAttacking = false;
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
     }
@@ -115,15 +116,17 @@ public class PlayerController : Singleton<PlayerController>
     {
         _animator.SetTrigger(_isAttackingHash);
 
-        Vector3 attackPosition = transform.position + transform.forward + Vector3.up * _attackHitBoxYOffset + _attackDirection;
-        List<Collider> HitObjects = new(Physics.OverlapBox(attackPosition, _attackHitBoxSize, Quaternion.identity, _damagableLayers));
-        foreach (Collider collider in HitObjects)
-        {
-            Debug.Log("hit");
-            if (collider.gameObject.TryGetComponent(out Health health)) health.TakeDamage(_damage);
-            CameraController.Instance.Shake(1f);
-        }
+        // shake camera when attacking
+        StartCoroutine(Timer.WaitFor(
+            _animator.GetCurrentAnimatorStateInfo(0).length * 0.3f,
+            () => CameraController.Instance.Shake(.1f)
+        ));
     }
+
+    // animation events
+    public void StartAttacking() => _isAttacking = true;
+
+    public void StopAttacking() => _isAttacking = false;
 
     private void HandleMove()
     {
@@ -156,12 +159,5 @@ public class PlayerController : Singleton<PlayerController>
 
         // got hit animation
         _animator.SetTrigger(_isHitHash);
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.purple;
-        Vector3 attackPosition = transform.position + transform.forward + Vector3.up * _attackHitBoxYOffset + _attackDirection;
-        Gizmos.DrawWireCube(attackPosition, _attackHitBoxSize * 2);
     }
 }
