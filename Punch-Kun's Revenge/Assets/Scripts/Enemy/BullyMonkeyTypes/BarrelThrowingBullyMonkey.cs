@@ -10,29 +10,27 @@ public class BarrelThrowingBullyMonkey : BullyMonkey
     [SerializeField] private GameObject _barrelPrefab;
     [Tooltip("The force applied to the barrel when thrown towards the player")]
     [SerializeField] private float _attackForce = 20f;
+    [SerializeField] private float _barrelYOffset = 2f;
+    [SerializeField] private float _throwDelay = 1f;
 
     protected override void AttackPlayer()
     {
-        // TODO: play barrel throwing attack animation
+        // play barrel throwing attack animation
+        _animator.SetTrigger(_isThrowingAttackHash);
 
         // throw barrel towards player
-        GameObject barrel = Instantiate(_barrelPrefab);
-        if (barrel != null && barrel.TryGetComponent(out Rigidbody barrelRb))
+        StartCoroutine(Timer.WaitFor(_throwDelay, () =>
         {
-            barrel.transform.position = transform.position + Vector3.up; // spawn barrel slightly above the bully monkey
-            Vector3 directionToPlayer = (_player.position - transform.position).normalized;
-            barrelRb.AddForce(directionToPlayer * _attackForce, ForceMode.Impulse);
-        }
+            GameObject barrel = Instantiate(_barrelPrefab);
+            if (barrel != null && barrel.TryGetComponent(out Rigidbody barrelRb))
+            {
+                barrel.transform.position = transform.position + Vector3.up * _barrelYOffset; // spawn barrel slightly above the bully monkey
+                Vector3 directionToPlayer = (_player.position - transform.position).normalized;
+                barrelRb.AddForce(directionToPlayer * _attackForce, ForceMode.Impulse);
+            }
+        }));
 
         // cooldown at the end
         base.AttackPlayer();
     }
-
-    // private void OnCollisionEnter(Collision collision)
-    // {
-    //     if (collision.gameObject.TryGetComponent(out PlayerHealth health))
-    //     {
-    //         health.TakeDamage(_playerDamage);
-    //     }
-    // }
 }

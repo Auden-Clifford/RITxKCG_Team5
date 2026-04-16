@@ -8,6 +8,7 @@ public class ChargingBullyMonkey : BullyMonkey
     [Header("Charge Settings")]
     [Tooltip("The force applied to the bully monkey when it charges at the player")]
     [SerializeField] private float _attackForce = 40f;
+    [SerializeField] private float _runAttackAnimationSpeed = 20f;
 
     protected override void AttackPlayer()
     {
@@ -15,8 +16,8 @@ public class ChargingBullyMonkey : BullyMonkey
         Vector3 directionToPlayer = (_player.position - transform.position).normalized;
         _rb.AddForce(_attackForce * directionToPlayer, ForceMode.Impulse);
 
-        // TODO: play attack animation
-
+        // play attack animation
+        _animator.SetFloat(_runningAttackSpeedMultiplierHash, _runAttackAnimationSpeed);
 
         // cooldown at the end
         base.AttackPlayer();
@@ -27,6 +28,7 @@ public class ChargingBullyMonkey : BullyMonkey
         if (collision.gameObject.TryGetComponent(out PlayerHealth health))
         {
             health.TakeDamage(_playerDamage);
+            _animator.SetFloat(_runningAttackSpeedMultiplierHash, 1f);      // reset attack speed multiplier
         }
     }
 }
