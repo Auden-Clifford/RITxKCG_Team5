@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fdd90bcd9a65e4345bf80f2f73e70a42, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.28777
+      value: -11.287769
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fdd90bcd9a65e4345bf80f2f73e70a42, type: 3}
       propertyPath: m_LocalPosition.y
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fdd90bcd9a65e4345bf80f2f73e70a42, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.00000071525574
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fdd90bcd9a65e4345bf80f2f73e70a42, type: 3}
       propertyPath: m_LocalRotation.w
@@ -509,7 +509,7 @@ MonoBehaviour:
   _stunDuration: 2
   _stunMoveSpeedMultiplier: 0.5
   _attackRange: 2
-  _attackHitBoxSize: {x: 1.5, y: 2, z: 1}
+  _attackHitBoxSize: {x: 2, y: 2, z: 1}
   _attackHitBoxYOffset: 2
   _damage: 3
   _damagableLayers:
@@ -527,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6497ecf79343d454daf34a0d792bda91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 5
+  _maxHealth: 20
   meshRenderer: {fileID: 6764969031576774833}
   healthBar: {fileID: 0}
   invincibilityTime: 0.8

@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public class BullyMonkeyHealth : Health
+public class CageHealth : Health
 {
     [SerializeField] private float score;
-
-    public event System.Action OnBullyMonkeyDeath = delegate { };
 
     protected override void Start()
     {
@@ -21,9 +19,7 @@ public class BullyMonkeyHealth : Health
             if (GameManager.Instance != null)
                 GameManager.Instance.AddScore(score);
 
-            // playing animation instead of destroying
-            if (OnBullyMonkeyDeath.GetInvocationList().Length > 0) OnBullyMonkeyDeath?.Invoke();
-            else Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }
