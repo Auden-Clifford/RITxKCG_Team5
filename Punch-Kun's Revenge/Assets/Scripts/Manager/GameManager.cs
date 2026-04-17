@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -12,6 +14,7 @@ public enum GameState
     LevelComplete
 }
 
+[RequireComponent(typeof(PlayerInput))]
 public class GameManager : Singleton<GameManager>
 {
     private float score;
@@ -41,10 +44,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private float healthItemSpawnTimer;
     [SerializeField] private float healthItemSpawnDelay;
 
+    [SerializeField] private EventSystem uiEventSystem;
+    [SerializeField] private GameObject pauseContinueButton;
+    [SerializeField] private GameObject gameOverRestartButton;
+    [SerializeField] private GameObject levelCompleteRestartButton;
+    [SerializeField] private PlayerInput _playerInputSystem;
+
     private List<GameObject> enemies;
     private List<GameObject> obstacles;
     private List<GameObject> healingItems;
     private CameraController _cameraController;
+    private PlayerInput _uiInputSystem;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -66,6 +76,7 @@ public class GameManager : Singleton<GameManager>
         gameplayUI.SetActive(true);
 
         _cameraController = CameraController.Instance;
+        _uiInputSystem = GetComponent<PlayerInput>();
         if (_cameraController == null)
         {
             Debug.LogError("CameraController not found!");
@@ -73,6 +84,8 @@ public class GameManager : Singleton<GameManager>
         }
 
         ShowCursor(false);
+        _uiInputSystem.enabled = false;
+        _playerInputSystem.enabled = true;
     }
 
     // Update is called once per frame
@@ -162,7 +175,12 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void PauseGame()
     {
-        ShowCursor(true);
+        // ShowCursor(true);
+
+        _playerInputSystem.enabled = false;
+        _uiInputSystem.enabled = true;
+        // uiEventSystem.firstSelectedGameObject = pauseContinueButton;
+        pauseContinueButton.GetComponent<Button>().Select();
 
         GameState = GameState.Paused;
         gameOverUI.SetActive(false);
@@ -181,6 +199,9 @@ public class GameManager : Singleton<GameManager>
     {
         ShowCursor(false);
 
+        _uiInputSystem.enabled = false;
+        _playerInputSystem.enabled = true;
+
         GameState = GameState.Gameplay;
         gameOverUI.SetActive(false);
         levelCompleteUI.SetActive(false);
@@ -196,7 +217,12 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void GameOver()
     {
-        ShowCursor(true);
+        // ShowCursor(true);
+
+        _playerInputSystem.enabled = false;
+        _uiInputSystem.enabled = true;
+        // uiEventSystem.firstSelectedGameObject = gameOverRestartButton;
+        gameOverRestartButton.GetComponent<Button>().Select(); ;
 
         GameState = GameState.GameOver;
         gameOverUI.SetActive(true);
@@ -213,7 +239,12 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void LevelComplete()
     {
-        ShowCursor(true);
+        // ShowCursor(true);
+
+        _playerInputSystem.enabled = false;
+        _uiInputSystem.enabled = true;
+        // uiEventSystem.firstSelectedGameObject = levelCompleteRestartButton;
+        levelCompleteRestartButton.GetComponent<Button>().Select(); ;
 
         GameState = GameState.LevelComplete;
         gameOverUI.SetActive(false);
@@ -230,6 +261,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void QuitToMain()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(Scenes.TITLE);
     }
 
@@ -245,15 +277,14 @@ public class GameManager : Singleton<GameManager>
 
     public void AddScore(float amount)
     {
-        Debug.Log("adding score");
         score += amount;
         scoreLabel.text = "Score: " + score;
     }
 
     // ** Input System Callbacks **
-    private void OnPauseMenu(InputValue val)
-    {
-        if (GameState != GameState.Paused) PauseGame();
-        else ResumeGame();
-    }
+    // private void OnPauseMenu(InputValue val)
+    // {
+    //     if (GameState != GameState.Paused) PauseGame();
+    //     else ResumeGame();
+    // }
 }
