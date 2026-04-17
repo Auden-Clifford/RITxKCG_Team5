@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody), typeof(PlayerInput), typeof(Animator))]
 public class PlayerController : Singleton<PlayerController>
