@@ -27,6 +27,8 @@ public class SwingingArmsBullyMonkey : BullyMonkey
         if (collision.gameObject.TryGetComponent(out PlayerHealth health))
         {
             health.TakeDamage(_playerDamage);
+
+            AudioManager.Instance.PlaySFX("ATTACKED_BY_MONKEY");
         }
     }
 }

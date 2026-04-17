@@ -7,6 +7,9 @@ public class HealingItem : Item
     protected override void OnPickup(GameObject player)
     {
         if (player.TryGetComponent(out PlayerHealth health))
+        {
             health.Heal(_healAmount);
+            AudioManager.Instance.PlaySFX("RECOVERY");
+        }
     }
 }
