@@ -29,6 +29,8 @@ public class ChargingBullyMonkey : BullyMonkey
         {
             health.TakeDamage(_playerDamage);
             _animator.SetFloat(_runningAttackSpeedMultiplierHash, 1f);      // reset attack speed multiplier
+
+            AudioManager.Instance.PlaySFX("ATTACKED_BY_MONKEY");
         }
     }
 }

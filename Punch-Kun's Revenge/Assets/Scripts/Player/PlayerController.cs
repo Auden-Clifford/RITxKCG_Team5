@@ -115,6 +115,8 @@ public class PlayerController : Singleton<PlayerController>
     {
         _animator.SetTrigger(_isAttackingHash);
 
+        AudioManager.Instance.PlaySFX("PUNCH");
+
         // shake camera when attacking
         StartCoroutine(Timer.WaitFor(
             _animator.GetCurrentAnimatorStateInfo(0).length * 0.3f,
@@ -146,6 +148,8 @@ public class PlayerController : Singleton<PlayerController>
         _animator.SetTrigger(_isJumpingHash);
 
         _rb.AddForce(_jumpForce * (Vector3.up + new Vector3(_moveX, 0, 0)), ForceMode.Impulse);
+
+        AudioManager.Instance.PlaySFX("JUMP");
     }
 
     private bool IsGrounded() => Physics.Raycast(transform.position + Vector3.up * _groundCheckOffset, Vector3.down, _groundCheckDistance, _groundLayer);

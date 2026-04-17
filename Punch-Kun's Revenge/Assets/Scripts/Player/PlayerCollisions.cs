@@ -18,6 +18,10 @@ public class PlayerCollisions : MonoBehaviour
 
             // also giving damage to player
             if (TryGetComponent(out PlayerHealth health)) health.TakeDamage(1);
+
+            // playing audio
+            if (TryGetComponent(out Barrel.BarrelBase barrel))
+                AudioManager.Instance.PlaySFX("BARREL_DESTROYED");
         }
     }
 
@@ -27,9 +31,12 @@ public class PlayerCollisions : MonoBehaviour
 
         if (other.gameObject.TryGetComponent(out Health health))
         {
-            Debug.LogError("Came here");
             health.TakeDamage(_player.DamageOnAttack);
             CameraController.Instance.Shake(1f);
+
+            // playing audio
+            if (TryGetComponent(out Barrel.BarrelBase barrel)) AudioManager.Instance.PlaySFX("HIT_THE_BARREL");
+            else if (TryGetComponent(out BullyMonkey bm)) AudioManager.Instance.PlaySFX("ATTACKED_THE_MONKEY");
         }
     }
 }

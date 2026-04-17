@@ -88,6 +88,9 @@ public class GameManager : Singleton<GameManager>
 
         _playerInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
         _uiInputSystem.actions["HidePauseMenu"].performed += ctx => ResumeGame();
+
+        // playing level 1 audio
+        AudioManager.Instance.PlayBGM("LEVEL_1");
     }
 
     // Update is called once per frame
@@ -219,6 +222,7 @@ public class GameManager : Singleton<GameManager>
     public void GameOver()
     {
         // ShowCursor(true);
+        AudioManager.Instance.PlayBGM("GAME_OVER", .5f);
 
         _playerInputSystem.enabled = false;
         _uiInputSystem.enabled = true;
@@ -240,6 +244,7 @@ public class GameManager : Singleton<GameManager>
     public void LevelComplete()
     {
         // ShowCursor(true);
+        AudioManager.Instance.PlayBGM("GAME_WON", .5f);
 
         _playerInputSystem.enabled = false;
         _uiInputSystem.enabled = true;
