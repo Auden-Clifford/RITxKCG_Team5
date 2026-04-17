@@ -44,7 +44,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private float healthItemSpawnTimer;
     [SerializeField] private float healthItemSpawnDelay;
 
-    [SerializeField] private EventSystem uiEventSystem;
     [SerializeField] private GameObject pauseContinueButton;
     [SerializeField] private GameObject gameOverRestartButton;
     [SerializeField] private GameObject levelCompleteRestartButton;
@@ -86,6 +85,9 @@ public class GameManager : Singleton<GameManager>
         ShowCursor(false);
         _uiInputSystem.enabled = false;
         _playerInputSystem.enabled = true;
+
+        _playerInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
+        _uiInputSystem.actions["HidePauseMenu"].performed += ctx => ResumeGame();
     }
 
     // Update is called once per frame
@@ -179,7 +181,6 @@ public class GameManager : Singleton<GameManager>
 
         _playerInputSystem.enabled = false;
         _uiInputSystem.enabled = true;
-        // uiEventSystem.firstSelectedGameObject = pauseContinueButton;
         pauseContinueButton.GetComponent<Button>().Select();
 
         GameState = GameState.Paused;
@@ -221,7 +222,6 @@ public class GameManager : Singleton<GameManager>
 
         _playerInputSystem.enabled = false;
         _uiInputSystem.enabled = true;
-        // uiEventSystem.firstSelectedGameObject = gameOverRestartButton;
         gameOverRestartButton.GetComponent<Button>().Select(); ;
 
         GameState = GameState.GameOver;
@@ -243,7 +243,6 @@ public class GameManager : Singleton<GameManager>
 
         _playerInputSystem.enabled = false;
         _uiInputSystem.enabled = true;
-        // uiEventSystem.firstSelectedGameObject = levelCompleteRestartButton;
         levelCompleteRestartButton.GetComponent<Button>().Select(); ;
 
         GameState = GameState.LevelComplete;
