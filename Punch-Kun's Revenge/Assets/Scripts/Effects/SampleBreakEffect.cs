@@ -115,8 +115,11 @@ namespace Effects
             Mesh sourceMesh = null;
             Material sourceMaterial = null;
 
-            if (source.TryGetComponent(out MeshFilter mf)) sourceMesh = mf.sharedMesh;
-            if (source.TryGetComponent(out Renderer rend)) sourceMaterial = rend.sharedMaterial;
+            sourceMesh = source.GetComponentInChildren<MeshFilter>().sharedMesh;
+            sourceMaterial = source.GetComponentInChildren<Renderer>().sharedMaterial;
+
+            // if (source.TryGetComponent(out MeshFilter mf)) sourceMesh = mf.sharedMesh;
+            // if (source.TryGetComponent(out Renderer rend)) sourceMaterial = rend.sharedMaterial;
 
             for (int i = 0; i < _fragmentCount; i++)
             {
