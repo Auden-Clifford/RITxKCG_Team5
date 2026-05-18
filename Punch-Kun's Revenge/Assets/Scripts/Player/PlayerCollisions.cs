@@ -16,11 +16,13 @@ public class PlayerCollisions : MonoBehaviour
         {
             damageable.TakeDamage();
 
+            // Debug.Log("Collided with " + collision.gameObject.name);
+
             // also giving damage to player
             if (TryGetComponent(out PlayerHealth health)) health.TakeDamage(1);
 
             // playing audio
-            if (TryGetComponent(out Barrel.BarrelBase barrel))
+            if (collision.gameObject.TryGetComponent(out Barrel.BarrelBase barrel))
                 AudioManager.Instance.PlaySFX("BARREL_DESTROYED");
         }
     }
@@ -35,8 +37,19 @@ public class PlayerCollisions : MonoBehaviour
             CameraController.Instance.Shake(1f);
 
             // playing audio
-            if (TryGetComponent(out Barrel.BarrelBase barrel)) AudioManager.Instance.PlaySFX("HIT_THE_BARREL");
-            else if (TryGetComponent(out BullyMonkey bm)) AudioManager.Instance.PlaySFX("ATTACKED_THE_MONKEY");
+            if (other.gameObject.TryGetComponent(out BullyMonkey bm))
+                AudioManager.Instance.PlaySFX("ATTACKED_THE_MONKEY");
+        }
+        else if (other.gameObject.TryGetComponent(out IDamageable damageable))
+        {
+            damageable.TakeDamage();
+            CameraController.Instance.Shake(1f);
+
+            Debug.Log("Collided with " + other.gameObject.name);
+
+            // playing audio
+            if (other.gameObject.TryGetComponent(out Barrel.BarrelBase barrel))
+                AudioManager.Instance.PlaySFX("HIT_THE_BARREL");
         }
     }
 }

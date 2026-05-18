@@ -111,23 +111,17 @@ public class GameManager : Singleton<GameManager>
 
                 if (enemySpawnTimer < 0)
                 {
-                    Debug.Log("spawning enemy");
                     enemySpawnTimer = enemySpawnDelay;
-                    //GameObject enemy = Instantiate(enemyPrefab, itemSpawnPosition);
                     enemies.Add(Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Length)], itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
                 }
                 if (obstacleSpawnTimer < 0)
                 {
-                    Debug.Log("spawning obstacle");
                     obstacleSpawnTimer = obstacleSpawnDelay;
-                    //GameObject obstacle = Instantiate(barrelPrefab, itemSpawnPosition);
                     enemies.Add(Instantiate(barrelPrefab[Random.Range(0, barrelPrefab.Length)], itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
                 }
                 if (healthItemSpawnTimer < 0)
                 {
-                    Debug.Log("spawning health item");
                     healthItemSpawnTimer = healthItemSpawnDelay;
-                    //GameObject healingitem =  Instantiate(potatoPrefab, itemSpawnPosition);
                     healingItems.Add(Instantiate(potatoPrefab, itemSpawnPosition.transform.position, itemSpawnPosition.transform.rotation));
                 }
                 break;
