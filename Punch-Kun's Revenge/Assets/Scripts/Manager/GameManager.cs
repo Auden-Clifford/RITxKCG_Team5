@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -19,6 +18,8 @@ public class GameManager : Singleton<GameManager>
 {
     private float score;
     [SerializeField] private TextMeshProUGUI scoreLabel;
+    [SerializeField] private TextMeshProUGUI winScoreLabel;
+    [SerializeField] private TextMeshProUGUI loseScoreLabel;
 
     [SerializeField] private Vector3 scrollSpeed;
     [SerializeField] private Vector3 scrollAcceleration;
@@ -226,7 +227,8 @@ public class GameManager : Singleton<GameManager>
 
         _playerInputSystem.enabled = false;
         _uiInputSystem.enabled = true;
-        gameOverRestartButton.GetComponent<Button>().Select(); ;
+        gameOverRestartButton.GetComponent<Button>().Select();
+        loseScoreLabel.text = "Score: " + score;
 
         GameState = GameState.GameOver;
         gameOverUI.SetActive(true);
@@ -249,6 +251,7 @@ public class GameManager : Singleton<GameManager>
         _playerInputSystem.enabled = false;
         _uiInputSystem.enabled = true;
         levelCompleteRestartButton.GetComponent<Button>().Select(); ;
+        winScoreLabel.text = "Score: " + score;
 
         GameState = GameState.LevelComplete;
         gameOverUI.SetActive(false);
