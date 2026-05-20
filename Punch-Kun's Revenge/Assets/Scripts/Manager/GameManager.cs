@@ -13,7 +13,6 @@ public enum GameState
     LevelComplete
 }
 
-[RequireComponent(typeof(PlayerInput))]
 public class GameManager : Singleton<GameManager>
 {
     [Header("Settings")]
@@ -49,7 +48,7 @@ public class GameManager : Singleton<GameManager>
     [Space(10)]
     [Header("Misc")]
     [SerializeField] private Transform itemSpawnPosition;
-    [SerializeField] private PlayerInput _playerInputSystem;
+    // [SerializeField] private PlayerInput _playerInputSystem;
 
     [Space(10)]
     [Header("Timers")]
@@ -68,7 +67,7 @@ public class GameManager : Singleton<GameManager>
     private List<GameObject> obstacles;
     private List<GameObject> healingItems;
     private CameraController _cameraController;
-    private PlayerInput _uiInputSystem;
+    // private PlayerInput _uiInputSystem;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -90,7 +89,7 @@ public class GameManager : Singleton<GameManager>
         gameplayUI.SetActive(true);
 
         _cameraController = CameraController.Instance;
-        _uiInputSystem = GetComponent<PlayerInput>();
+        // _uiInputSystem = GetComponent<PlayerInput>();
         if (_cameraController == null)
         {
             Debug.LogError("CameraController not found!");
@@ -102,8 +101,8 @@ public class GameManager : Singleton<GameManager>
         // _playerInputSystem.enabled = true;
 
         // _playerInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
-        _uiInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
-        _uiInputSystem.actions["HidePauseMenu"].performed += ctx => ResumeGame();
+        // _uiInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
+        // _uiInputSystem.actions["HidePauseMenu"].performed += ctx => ResumeGame();
 
         // playing level 1 audio
         if (AudioManager.Instance != null) AudioManager.Instance.PlayBGM("LEVEL_1");
