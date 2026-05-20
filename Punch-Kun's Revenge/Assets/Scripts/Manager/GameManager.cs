@@ -16,26 +16,43 @@ public enum GameState
 [RequireComponent(typeof(PlayerInput))]
 public class GameManager : Singleton<GameManager>
 {
-    private float score;
-    [SerializeField] private TextMeshProUGUI scoreLabel;
-    [SerializeField] private TextMeshProUGUI winScoreLabel;
-    [SerializeField] private TextMeshProUGUI loseScoreLabel;
-
+    [Header("Settings")]
     [SerializeField] private Vector3 scrollSpeed;
     [SerializeField] private Vector3 scrollAcceleration;
     [SerializeField] private float maxScrollSpeed;
 
-    public GameState GameState;
+    [Space(10)]
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI scoreLabel;
+    [SerializeField] private TextMeshProUGUI winScoreLabel;
+    [SerializeField] private TextMeshProUGUI loseScoreLabel;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject levelCompleteUI;
     [SerializeField] private GameObject pausedUI;
     [SerializeField] private GameObject gameplayUI;
+    [SerializeField] private GameObject pauseContinueButton;
+    [SerializeField] private GameObject gameOverRestartButton;
+    [SerializeField] private GameObject levelCompleteRestartButton;
+
+    [Space(10)]
+    [Header("UI Buttons Toggle")]
+    [SerializeField] private float _uiButtonDelay = 1f;
+    [SerializeField] private GameObject _gameOverButtonsParentToHide;
+    [SerializeField] private GameObject _levelCompleteButtonsParentToHide;
+
+    [Space(10)]
+    [Header("Prefabs")]
     [SerializeField] private GameObject[] enemyPrefab;
     [SerializeField] private GameObject[] barrelPrefab;
     [SerializeField] private GameObject potatoPrefab;
 
+    [Space(10)]
+    [Header("Misc")]
     [SerializeField] private Transform itemSpawnPosition;
+    [SerializeField] private PlayerInput _playerInputSystem;
 
+    [Space(10)]
+    [Header("Timers")]
     [SerializeField] private float enemySpawnTimer;
     [SerializeField] private float enemySpawnDelay;
 
@@ -45,11 +62,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private float healthItemSpawnTimer;
     [SerializeField] private float healthItemSpawnDelay;
 
-    [SerializeField] private GameObject pauseContinueButton;
-    [SerializeField] private GameObject gameOverRestartButton;
-    [SerializeField] private GameObject levelCompleteRestartButton;
-    [SerializeField] private PlayerInput _playerInputSystem;
-
+    private float score;
+    public GameState GameState;
     private List<GameObject> enemies;
     private List<GameObject> obstacles;
     private List<GameObject> healingItems;
@@ -91,7 +105,7 @@ public class GameManager : Singleton<GameManager>
         _uiInputSystem.actions["HidePauseMenu"].performed += ctx => ResumeGame();
 
         // playing level 1 audio
-        AudioManager.Instance.PlayBGM("LEVEL_1");
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayBGM("LEVEL_1");
     }
 
     // Update is called once per frame
@@ -232,6 +246,9 @@ public class GameManager : Singleton<GameManager>
 
         // stop time
         Time.timeScale = 0;
+
+        _gameOverButtonsParentToHide.SetActive(false);
+        StartCoroutine(Timer.WaitForUnscaled(_uiButtonDelay, () => _gameOverButtonsParentToHide.SetActive(true)));
     }
 
     /// <summary>
@@ -255,6 +272,9 @@ public class GameManager : Singleton<GameManager>
 
         // stop time
         Time.timeScale = 0;
+
+        _levelCompleteButtonsParentToHide.SetActive(false);
+        StartCoroutine(Timer.WaitForUnscaled(_uiButtonDelay, () => _levelCompleteButtonsParentToHide.SetActive(true)));
     }
 
     /// <summary>
