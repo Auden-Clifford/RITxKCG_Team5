@@ -11843,17 +11843,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ec5fea700b7ff4ca513e3980e6f0d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollSpeed: {x: 0.5, y: 0, z: 0}
+  scrollAcceleration: {x: 0.5, y: 0, z: 0}
+  maxScrollSpeed: 8
   scoreLabel: {fileID: 332619006}
   winScoreLabel: {fileID: 331343534}
   loseScoreLabel: {fileID: 1494510631}
-  scrollSpeed: {x: 0.5, y: 0, z: 0}
-  scrollAcceleration: {x: 0.2, y: 0, z: 0}
-  maxScrollSpeed: 5
-  GameState: 0
   gameOverUI: {fileID: 1275389436}
   levelCompleteUI: {fileID: 1589234494}
   pausedUI: {fileID: 1598254589}
   gameplayUI: {fileID: 2114212343}
+  pauseContinueButton: {fileID: 190191336}
+  gameOverRestartButton: {fileID: 1785571959}
+  levelCompleteRestartButton: {fileID: 1189376354}
+  _uiButtonDelay: 1.5
+  _gameOverButtonsParentToHide: {fileID: 533993888}
+  _levelCompleteButtonsParentToHide: {fileID: 1477631759}
   enemyPrefab:
   - {fileID: 343508138818064785, guid: 0ed344f2e4c8a214aa6cab9056e54c54, type: 3}
   - {fileID: 343508138818064785, guid: 15c68f62cc2806b4e954f23e377b254b, type: 3}
@@ -11863,19 +11868,14 @@ MonoBehaviour:
   - {fileID: 8705712110159800726, guid: cbb7eab8922b5e740a0fd68b6a08d5c4, type: 3}
   potatoPrefab: {fileID: 822610579171219329, guid: 8536b221eb4b3634ba4ab35b5d90134d, type: 3}
   itemSpawnPosition: {fileID: 254374370}
+  _playerInputSystem: {fileID: 747994279}
   enemySpawnTimer: 0
   enemySpawnDelay: 10
   obstacleSpawnTimer: 0
   obstacleSpawnDelay: 17
   healthItemSpawnTimer: 0
   healthItemSpawnDelay: 25
-  pauseContinueButton: {fileID: 190191336}
-  gameOverRestartButton: {fileID: 1785571959}
-  levelCompleteRestartButton: {fileID: 1189376354}
-  _playerInputSystem: {fileID: 747994279}
-  _uiButtonDelay: 1.5
-  _gameOverButtonsParentToHide: {fileID: 533993888}
-  _levelCompleteButtonsParentToHide: {fileID: 1477631759}
+  GameState: 0
 --- !u!4 &1210252584
 Transform:
   m_ObjectHideFlags: 0
@@ -12670,7 +12670,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1275389437
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19999,9 +19999,9 @@ RectTransform:
   - {fileID: 1608192727}
   m_Father: {fileID: 533993889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 900, y: -36.46945}
   m_SizeDelta: {x: 389.0074, y: 72.9389}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1785571961
@@ -21565,9 +21565,9 @@ RectTransform:
   - {fileID: 148877929}
   m_Father: {fileID: 533993889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 900, y: -189.40836}
   m_SizeDelta: {x: 389.0074, y: 72.9389}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1925617697
@@ -24126,6 +24126,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 60686985815690501, guid: c5f60c30c27171a42b33a14b94272467, type: 3}
+      propertyPath: _jumpForce
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 6264088195357298359, guid: c5f60c30c27171a42b33a14b94272467, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.287769
