@@ -98,10 +98,11 @@ public class GameManager : Singleton<GameManager>
         }
 
         ShowCursor(false);
-        _uiInputSystem.enabled = false;
-        _playerInputSystem.enabled = true;
+        // _uiInputSystem.enabled = false;
+        // _playerInputSystem.enabled = true;
 
-        _playerInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
+        // _playerInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
+        _uiInputSystem.actions["ShowPauseMenu"].performed += ctx => PauseGame();
         _uiInputSystem.actions["HidePauseMenu"].performed += ctx => ResumeGame();
 
         // playing level 1 audio
@@ -191,8 +192,8 @@ public class GameManager : Singleton<GameManager>
     {
         // ShowCursor(true);
 
-        _playerInputSystem.enabled = false;
-        _uiInputSystem.enabled = true;
+        // _playerInputSystem.enabled = false;
+        // _uiInputSystem.enabled = true;
         pauseContinueButton.GetComponent<Button>().Select();
 
         GameState = GameState.Paused;
@@ -212,8 +213,8 @@ public class GameManager : Singleton<GameManager>
     {
         ShowCursor(false);
 
-        _uiInputSystem.enabled = false;
-        _playerInputSystem.enabled = true;
+        // _uiInputSystem.enabled = false;
+        // _playerInputSystem.enabled = true;
 
         GameState = GameState.Gameplay;
         gameOverUI.SetActive(false);
@@ -233,8 +234,8 @@ public class GameManager : Singleton<GameManager>
         // ShowCursor(true);
         AudioManager.Instance.PlayBGM("GAME_OVER", .5f);
 
-        _playerInputSystem.enabled = false;
-        _uiInputSystem.enabled = true;
+        // _playerInputSystem.enabled = false;
+        // _uiInputSystem.enabled = true;
         gameOverRestartButton.GetComponent<Button>().Select();
         loseScoreLabel.text = "Score: " + score;
 
@@ -259,8 +260,8 @@ public class GameManager : Singleton<GameManager>
         // ShowCursor(true);
         AudioManager.Instance.PlayBGM("GAME_WON", .5f);
 
-        _playerInputSystem.enabled = false;
-        _uiInputSystem.enabled = true;
+        // _playerInputSystem.enabled = false;
+        // _uiInputSystem.enabled = true;
         levelCompleteRestartButton.GetComponent<Button>().Select(); ;
         winScoreLabel.text = "Score: " + score;
 
